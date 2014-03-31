@@ -1,0 +1,12 @@
+/*
+ * edit.css: Stylesheet for actual editing
+ */
+
+.contentArea { 
+	outline:2px dotted blue !important;
+}
+
+.contentArea:hover {
+	cursor:pointer;
+	outline:3px dotted yellow !important;
+}

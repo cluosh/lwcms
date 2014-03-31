@@ -1,0 +1,91 @@
+/*
+ * main.css: Main backend style definitions
+ */
+
+/* Wrapper and toolbar definitions */
+#backend-wrapper {
+	position:relative;
+}
+
+#backend-edit-toolbar {
+	height:20px;
+	background-color:grey;
+	width:100%;
+	border-bottom:1px solid black;
+	padding-top:4px;
+	padding-bottom:4px;
+	font-family:Source Sans Pro,Arial;
+}
+
+/* Toolbar controls */
+#backend-edit-toolbar a {
+	text-decoration:none;
+	color:white;
+}
+
+#backend-edit-toolbar a:hover,a.active:hover {
+	text-decoration:underline;
+	color:red !important;
+}
+
+#backend-edit-toolbar a.active {
+	color:black;
+}
+
+#backend-left-menu {
+	float:left;
+	margin-left: 4px;
+}
+
+#backend-right-menu {
+	float:right;
+	margin-right: 4px;
+}
+
+/* Editing popup */
+#editing-popup-background {
+	position: fixed;   
+    height: 100%;
+    width: 100%;
+    left: 0;
+    top: 0;
+    z-index: 9;
+    background-color: #000000;
+    opacity: 0.5;
+    display:none;
+}
+
+#editing-popup {
+    background-color: #FFFFFF;
+    min-height: 200px;
+    max-height: 500px;
+    width: 1000px;
+    left: 50%;
+    top: 50%;
+    margin-left: -500px;
+    margin-top: -250px;
+    position: fixed;
+    z-index: 10;
+    display:none;
+    font-family:Source Sans Pro,Arial;
+    overflow:auto;
+}
+
+#edit-bar {
+	padding:5px;
+	height:29px;
+	border-bottom:1px solid black;
+}
+
+#edit-bar button {
+	float:right;
+}
+
+#edit-content-selection {
+	float:left;
+}
+
+#editing-content {
+	padding:5px;
+	overflow:auto;
+}

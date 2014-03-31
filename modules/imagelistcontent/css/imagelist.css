@@ -1,0 +1,43 @@
+/*
+ * imagelist.css: Stylesheet definitions for imagelist content
+ */
+
+/* Image List Content */
+.image-list-box {
+    position:relative;
+}
+
+.image-list-box .image {
+    float: left;
+}
+
+.image-list-box .text {
+    float: left;
+}
+
+.image-list-box .hidden-text {
+	display:none;
+	position:absolute;
+	z-index:1;
+}
+
+.image-list-hide {
+	text-decoration:none;
+	width:12px;
+	height:0px;
+	padding-top:12px;
+	background-position:0 0;
+	overflow:hidden;
+	background-image:url('../images/hide_icon.png');
+	float:right;
+}
+
+.image-list-hide:hover {
+	background-position:0 -12px;
+}
+
+.image-popup {
+	position:absolute;
+	z-index:10;
+	display:none;
+}
