@@ -6,21 +6,16 @@
 function updateInlineformsData() {
 	$('.edit-form').each(function(){
 		var data = $(this).find('.form-name input').val()+"==";
-		var custom_checks = "";
 		// Fields
-		$('.field-row').each(function(){
+		$(this).find('.field-row').each(function(){
 			var name = $(this).find('.field-name').val();
 			data += name.replace(/\W/g, '')+"="+encodeURIComponent(name)+"="+($(this).find('.field-required').is(':checked') ? "1" : "0")+"="+$(this).find('.field-type').val()+";";
-			if($(this).find('.field-customcheck').is(':checked')) 
-				custom_checks += 'custom_check='+name.replace(/\W/g, '')+";";
 		});
 		data += "==";
 		// Preferences
-		data += ($(this).find('.form-defcheck').is(':checked') ? "default_check=-1;" : "");
 		data += ($(this).find('.form-db').is(':checked') ? "db=1;" : "");
 		data += ($(this).find('.form-captcha').is(':checked') ? "captcha=1;" : "");
 		data += ($(this).find('.form-email').val() != "" ? "email="+encodeURIComponent($(this).find('.form-email').val())+";" : "");
-		data += custom_checks;
 		$(this).children('.form-hidden-data').val(data);
 	});
 }
@@ -28,6 +23,7 @@ function updateInlineformsData() {
 // Function for sending values to the database
 function valueAssign_inlineforms() {
 	updateInlineformsData();
+	curContentType = 'inlineforms';
 	var data = "";
 	$('.form-hidden-data').each(function(){
 		data += $(this).val()+"!!";
@@ -57,11 +53,14 @@ function getInlineformsOverview() {
 	// Set Assign Func
 	globalAssignFunc = window['valueAssign_inlineforms'];
 	
+	// Set content area value
+	curContentArea = 'none';
+	
 	// Get information from the database
 	$.ajax({
 		type:'GET',
 		url:'handlers/edit/ajax.php',
-		data:{pageid:curPageID,contentArea:'none',contentType:'inlineforms'},
+		data:{pageid:curPageID,contentArea:curContentArea,contentType:'inlineforms'},
 		async:false,
 		dataType:"xml"
 	}).done(function(data){
@@ -69,12 +68,12 @@ function getInlineformsOverview() {
 		$('#editing-content').html("");
 		$(data).find("form").each(function(){
 			var data = "<div class='edit-form'>";
-			data += "<div class='form-info'><div class='form-name'><input type='text' value='"+$(this).attr("name")+"' /></div><a class='form-info-expand' href=''>#</a></div>";
+			data += "<div class='form-info'><div class='form-name'><input type='text' value='"+$(this).attr("name")+"' /></div><div class='expandbox'><a class='form-info-expand' href=''>#</a></div></div>";
 			// Get preferences
 			var pref = $(this).find('pref');
 			data += "<div class='form-preferences'><table>";
-			data += "<tr><td><input type='checkbox' class='form-defcheck' "+(pref.find('defcheck').text() == '1' ? "checked='checked'" : "")+"/></td><td>Check fields for validity</td><td><input type='checkbox' class='form-captcha' "+(pref.find('captcha').text() == '1' ? "checked='checked'" : "")+"/></td><td>Use CAPTCHA</td></tr>";
-			data += "<tr><td><input type='checkbox' class='form-db' "+(pref.find('db').text() == '1' ? "checked='checked'" : "")+"/></td><td>Save data to DB</td><td><input type='input' class='form-email' value='"+pref.find('email').text()+"'/></td><td>Send data to e-mail (sperarate addresses with ';')</td></tr>";
+			data += "<tr><td>Use CAPTCHA:&nbsp;<input type='checkbox' class='form-captcha' "+(pref.find('captcha').text() == '1' ? "checked='checked'" : "")+"/></td><td></td></tr>";
+			data += "<tr><td>Save data to DB:&nbsp;<input type='checkbox' class='form-db' "+(pref.find('db').text() == '1' ? "checked='checked'" : "")+"/></td><td>Send data to e-mail (sperarate addresses with ';'):&nbsp;<input type='input' class='form-email' value='"+pref.find('email').text()+"'/></td></tr>";
 			data += "</table></div>";
 			// Get fields
 			data += "<div class='form-fields'><table><tr><th>Name</th><th>Type</th><th>Preferences</th><th>Controls</th></tr>";
@@ -89,7 +88,7 @@ function getInlineformsOverview() {
 				data += "<option value='checkbox' "+($(this).find('type').text() == 'checkbox' ? "selected='selected'" : "")+">Checkbox</option>";
 				data += "<option value='dynamic' "+($(this).find('type').text() == 'dynamic' ? "selected='selected'" : "")+">Dynamic</option>";
 				data += "</select></td>";
-				data += "<td><input type='checkbox' class='field-required' "+($(this).find('req').text() == '1' ? "checked='checked'" : "")+"/>&nbsp;Required field<br /><input type='checkbox' class='field-customcheck' "+($(this).find('customcheck').text() == '1' ? "checked='checked'" : "")+"/>&nbsp;Custom validation</td>";
+				data += "<td><input type='checkbox' class='field-required' "+($(this).find('req').text() == '1' ? "checked='checked'" : "")+"/>&nbsp;Required field</td>";
 				data += "<td><a href='#' class='form-field-up'>Up</a>&nbsp;|&nbsp;<a href='#' class='form-field-down'>Down</a>&nbsp;|&nbsp;<a href='#' class='form-field-delete'>Delete</a></td>";
 				data += "</tr>";
 			});
@@ -108,16 +107,34 @@ $(function(){
 	$('#backend-left-menu').append('&nbsp;|&nbsp;<a class="toolbar-link" id="backend-inlineforms-button" href="#">Forms</a>');
 });
 
+$(document).on('click','.form-info-hide,.form-info-expand',function(){
+	var info = $(this).parents('div.form-info');
+	if($(this).hasClass('form-info-hide')) {
+		info.siblings('div').hide();
+		$(this).addClass('form-info-expand');
+		$(this).removeClass('form-info-hide');
+	} else if($(this).hasClass('form-info-expand')) {
+		$('.form-preferences').hide();
+		$('.form-fields').hide();
+		$('.form-info-hide').addClass('form-info-expand');
+		$('.form-info-hide').removeClass('form-info-hide');
+		info.siblings('div').show();
+		$(this).addClass('form-info-hide');
+		$(this).removeClass('form-info-expand');
+	}
+	return false;
+});
+
 $(document).on('click','#backend-inlineforms-button,#edit-button-add_form,.edit-form-add-field,.form-field-up,.form-field-down,.form-field-delete',function(){
 	if($(this).attr("id") == "backend-inlineforms-button") {
 		getInlineformsOverview();
 		return false;
 	} else if($(this).attr("id") == "edit-button-add_form") {
 		var data = "<div class='edit-form'>";
-		data += "<div class='form-info'><div class='form-name'><input type='text' value='NEW_FORM' /></div><a class='form-info-expand' href=''>#</a></div>";
+		data += "<div class='form-info'><div class='form-name'><input type='text' value='NEW_FORM' /></div><div class='expandbox'><a class='form-info-expand' href=''>#</a></div></div>";
 		data += "<div class='form-preferences'><table>";
-		data += "<tr><td><input type='checkbox' class='form-defcheck' checked='checked' /></td><td>Check fields for validity</td><td><input type='checkbox' class='form-captcha' /></td><td>Use CAPTCHA</td></tr>";
-		data += "<tr><td><input type='checkbox' class='form-db' /></td><td>Save data to DB</td><td><input type='input' class='form-email' value=''/></td><td>Send data to e-mail (sperarate addresses with ';')</td></tr>";
+		data += "<tr><td>Use CAPTCHA:&nbsp;<input type='checkbox' class='form-captcha' /></td><td></td></tr>";
+		data += "<tr><td>Save data to DB:&nbsp;<input type='checkbox' class='form-db' /></td><td>Send data to e-mail (sperarate addresses with ';'):&nbsp;<input type='input' class='form-email' value=''/></td></tr>";
 		data += "</table></div>";
 		data += "<div class='form-fields'><table><tr><th>Name</th><th>Type</th><th>Preferences</th><th>Controls</th></tr>";
 		data += "</table><button class='edit-form-add-field' type='button'>Add field</button></div>";
@@ -137,7 +154,7 @@ $(document).on('click','#backend-inlineforms-button,#edit-button-add_form,.edit-
 		data += "<option value='checkbox'>Checkbox</option>";
 		data += "<option value='dynamic'>Dynamic</option>";
 		data += "</select></td>";
-		data += "<td><input type='checkbox' class='field-required' />&nbsp;Required field<br /><input type='checkbox' class='field-customcheck' />&nbsp;Custom validation</td>";
+		data += "<td><input type='checkbox' class='field-required' />&nbsp;Required field</td>";
 		data += "<td><a href='#' class='form-field-up'>Up</a>&nbsp;|&nbsp;<a href='#' class='form-field-down'>Down</a>&nbsp;|&nbsp;<a href='#' class='form-field-delete'>Delete</a></td>";
 		data += "</tr>";
 		$(this).siblings('table:first').append(data);
