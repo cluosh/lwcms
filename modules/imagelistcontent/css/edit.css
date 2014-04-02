@@ -1,0 +1,32 @@
+/* 
+ * edit.css: Imagelist editing 
+ */
+ 
+.imagelist-url img {
+	height:80px;
+	width:150px;
+}
+
+.imagelist-url {
+	text-align:center;
+}
+
+.imagelist-shorttext > div,
+.imagelist-longtext > div,
+.image-popup-text > div {
+	width:300px;
+	height:150px;
+	padding:5px;
+	border:1px dashed black;
+	overflow:auto;
+}
+
+.imagelist-shorttext > div:hover,
+.imagelist-longtext > div:hover,
+.image-popup-text > div:hover {
+	border:1px dashed green;
+}
+
+.image-popup-text > div {
+	width:100px;
+}

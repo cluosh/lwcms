@@ -1,0 +1,33 @@
+/* 
+ * edit.css: Editing stylesheet for slideshow module
+ */
+ 
+.slide-image-text > div {
+	width:300px;
+	height:100px;
+	padding:5px;
+	border:1px dashed black;
+	overflow:auto;
+}
+
+.slide-image-text > div:hover {
+	border:1px dashed green;
+}
+
+.imagelist-url img {
+	height:80px;
+	width:150px;
+}
+
+.imagelist-url {
+	text-align:center;
+}
+
+.slide-image-url img {
+	height:80px;
+	width:150px;
+}
+
+.slide-image-url {
+	text-align:center;
+}

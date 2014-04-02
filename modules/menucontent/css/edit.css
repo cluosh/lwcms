@@ -1,0 +1,41 @@
+/*
+ * edit.css: Menu-Editing 
+ */
+
+
+/* Menu editing */
+.menu-edit-table th {
+	text-align:left;
+	max-width:200px;
+	width:150px;
+}
+
+.menu-edit-table td {
+	max-width:200px;
+	width:150px;
+}
+
+.table-checkbox {
+	text-align:center;
+}
+
+#menu-edit-table tr.selected .menu-edit-display-name input,
+#menu-edit-table tr.selected .menu-edit-controls a {
+	display:block;
+}
+
+#menu-edit-table tr.selected .menu-edit-display-name input,
+#menu-edit-table tr.selected .menu-edit-controls a {
+	display:block;
+}
+
+#menu-edit-table tr .menu-edit-display-name input,
+#menu-edit-table tr .menu-edit-controls a {
+	display:none;
+}
+
+#menu-edit-table tr .menu-edit-display-name input,
+#menu-edit-table tr .menu-edit-controls a {
+	display:none;
+}
+

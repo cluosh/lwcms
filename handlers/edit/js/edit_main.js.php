@@ -6,6 +6,7 @@
 var curContentArea = "";
 var curContentType = 0;
 var curContent = "";
+var globalAssignFunc = 0;
 	
 // jQuery-Document ready function, backend core
 $(function(){
@@ -59,14 +60,18 @@ $(function(){
 	});
 	$('#edit-button-accept').bind('click',function(){
 		// Get Content
+		var fn = 0;
 		<?php 
 		foreach($this->modman->returnContentModules() as $module) {
 			echo "if(curContentType == '".$module."') {
-			var fn = window['valueAssign_".$module."'];
-			curContent = fn();
+			fn = window['valueAssign_".$module."'];
 		}\n";
 		}
 		?>
+		
+		fn = fn ? fn : globalAssignFunc;
+		curContent = fn();
+		globalAssignFunc = 0;
 		
 		// Send content Information
 		$.ajax({

@@ -46,7 +46,8 @@
 		
 		// Editing header
 		public function editingHeaderInfo() { 
-			return "<script type='text/javascript' src='modules/menucontent/js/menu.js'></script>";
+			return "<script type='text/javascript' src='modules/menucontent/js/menu.js'></script>
+			<link rel='stylesheet' type='text/css' href='modules/menucontent/css/edit.css' />";
 		}
 		
 		// Save data from edit forms

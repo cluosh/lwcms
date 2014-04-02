@@ -45,5 +45,33 @@
 			return "<script type='text/javascript' src='modules/imagelistcontent/js/imagelist.js'></script>
 			<link rel='stylesheet' type='text/css' href='modules/imagelistcontent/css/imagelist.css' />";
 		}
+		
+		// Editing header
+		public function editingHeaderInfo() { 
+			return "<script type='text/javascript' src='modules/imagelistcontent/js/edit.js'></script>
+			<link rel='stylesheet' type='text/css' href='modules/imagelistcontent/css/edit.css'/>";
+		}
+		
+		// Save data from edit forms
+		public function editSave($utility) { 
+			// Split up data in chunks and process
+			// Update database
+			$utility->content['content'] = substr($utility->content['content'],0,-1);
+			$utility->updateDB();
+			$this->init($utility->content['contentArea'],$utility->content['content']);
+			return $this->processData();
+		}
+		
+		// Return menu overview for editing purposes
+		public function editData($utility) { 
+			// Query database
+			$data = $utility->query("SELECT `content` FROM `".$utility->prefix()."pages_content` WHERE `pageID`='".$utility->escape($utility->content['pageID'])."' AND `contentArea`='".$utility->escape($utility->content['contentArea'])."';");
+			if($data->num_rows == 1) {
+				$array = $data->fetch_assoc();
+				return $array['content'];
+			}
+			else 
+				return "FAIL";
+		}
 	}
 ?>
