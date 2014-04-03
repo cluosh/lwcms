@@ -17,6 +17,7 @@
 		// Construct function
 		protected function construct() {
 			$this->contentArea(false);
+			$this->alwaysLoad(true);
 			$this->displayedName("Inlineforms");
 		}
 		
@@ -36,12 +37,9 @@
 			if($utility->content['contentArea'] == 'none') {
 				$chunks = explode("!!",$utility->content['content']);
 				$forms = array();
-				$special_data = array();
 				foreach($chunks as $form) {
 					$form_split = explode("==",$form);
-					if(count($form_split) == 2) {
-						// Special data
-					} elseif(count($form_split) == 3) {
+					if(count($form_split) == 3) {
 						// General form data
 						$name = $utility->escape($form_split[0]);
 						$fields = $utility->escape(substr($form_split[1],0,-1));
@@ -49,13 +47,9 @@
 						array_push($forms,"INSERT INTO `".$utility->prefix()."mod_inlineforms` VALUES ('".$name."','".$fields."','".$checks."');");					
 					} 
 				}
-				if(count($special_data) == 0) {
-					// Delete old data from DB
-					$utility->query("TRUNCATE TABLE `".$utility->prefix()."mod_inlineforms`;");
-					foreach($forms as $query) $utility->query($query);
-				} elseif(count($forms) == 0) {
-					foreach($special_data as $query) $utility->query($query);
-				}
+				// Delete old data from DB
+				$utility->query("TRUNCATE TABLE `".$utility->prefix()."mod_inlineforms`;");
+				foreach($forms as $query) $utility->query($query);
 				return "";
 			}
 		}
@@ -82,11 +76,14 @@
 					$fields = explode(";",$row['fields']);
 					foreach($fields as $field) {
 						$split = explode("=",$field);
-						$xml_data .= "<field name='".$split[0]."'>";
-						$xml_data .= "<name>".urldecode($split[1])."</name>";
-						$xml_data .= "<type>".$split[3]."</type>";
-						$xml_data .= "<req>".$split[2]."</req>";
-						$xml_data .= "</field>";
+						if($split[0] != "") {
+							$xml_data .= "<field name='".$split[0]."'>";
+							$xml_data .= "<name>".urldecode($split[1])."</name>";
+							$xml_data .= "<type>".$split[3]."</type>";
+							$xml_data .= "<req>".$split[2]."</req>";
+							$xml_data .= "<display_name>".$split[4]."</display_name>";
+							$xml_data .= "</field>";
+						}
 					}
 					$xml_data .= "</fields>";
 					$xml_data .= "</form>";

@@ -59,13 +59,14 @@
 			// Load modules which need to be loaded at all times
 			foreach($this->load_always as $module) $this->loadModule($module);
 			// Load content modules
-			if($this->page->pageInfo()['ID'] == -1) {
+			$id = $this->page->pageInfo();
+			if($id['ID'] == -1) {
 				foreach($this->modules as $module) {
 					$module = explode("=",$module);
 					$this->loadModule($module[0]);
 				}
 			} else {
-				$result = $this->page->query("SELECT `contentType` FROM `".$this->page->prefix()."pages_content` WHERE `pageID`='".$this->page->escape($this->page->pageInfo()['ID'])."';");
+				$result = $this->page->query("SELECT `contentType` FROM `".$this->page->prefix()."pages_content` WHERE `pageID`='".$this->page->escape($id['ID'])."';");
 				while($array = $result->fetch_assoc())
 					$this->loadModule($array['contentType']);
 			}
@@ -78,8 +79,9 @@
 		
 		// Return edit headers
 		public function edit_headers() {
+			$id = $this->page->pageInfo();
 			$headers = "<link rel='stylesheet' type='text/css' href='handlers/edit/css/main.css' />";
-			$headers .= "<script type='text/javascript'>var curPageID = ".$this->page->pageinfo()['ID'].";</script>";
+			$headers .= "<script type='text/javascript'>var curPageID = ".$id['ID'].";</script>";
 			$headers .= "<script type='text/javascript' src='index.php?js=edit_main&amp;edit_page=".(isset($_GET['edit']) && $_GET['edit'] != "" ? $_GET['edit'] : (isset($_GET['page']) && $_GET['page'] != "" ? $_GET['page'] : "home"))."'></script>";
 			$headers .= $this->edit_headers;
 			return $headers;

@@ -48,9 +48,10 @@
 		// Check DB for content area entry, if it exists, return as
 		// array, if not, return -1
 		private function getContentAreaData() {
-			if(func_num_args() == 1)
-				$result = $this->page->query("SELECT `contentArea`,`contentType`,`content` FROM `".$this->page->prefix()."pages_content` WHERE `pageID`='".$this->page->escape($this->page->pageInfo()['ID'])."' AND `contentArea`='".$this->page->escape(func_get_arg(0))."';");
-			else
+			if(func_num_args() == 1) {
+				$id = $this->page->pageInfo();
+				$result = $this->page->query("SELECT `contentArea`,`contentType`,`content` FROM `".$this->page->prefix()."pages_content` WHERE `pageID`='".$this->page->escape($id['ID'])."' AND `contentArea`='".$this->page->escape(func_get_arg(0))."';");
+			} else
 				$result = $this->page->query("SELECT `contentArea`,`contentType`,`content` FROM `".$this->page->prefix()."pages_content` WHERE `pageID`='".$this->page->escape(func_get_arg(1))."' AND `contentArea`='".$this->page->escape(func_get_arg(0))."';");
 			if($result->num_rows == 1) 
 				return $result->fetch_assoc();
@@ -64,7 +65,8 @@
 			$content['contentArea'] = $areaname;
 			$content['contentType'] = (isset($this->type_info[$areaname]) ? $this->type_info[$areaname] : 'default');
 			$content['content'] = "";
-			$this->page->query("INSERT INTO `".$this->page->prefix()."pages_content` VALUES ('".$this->page->escape($this->page->pageInfo()['ID'])."','".$this->page->escape($areaname)."','".$this->page->escape($content['contentType'])."','');");
+			$id = $this->page->pageInfo();
+			$this->page->query("INSERT INTO `".$this->page->prefix()."pages_content` VALUES ('".$this->page->escape($id['ID'])."','".$this->page->escape($areaname)."','".$this->page->escape($content['contentType'])."','');");
 			return $content;
 		}
 	

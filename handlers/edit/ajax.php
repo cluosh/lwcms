@@ -13,6 +13,9 @@
 	// -----------------------------------------------------------------
 	// AJAX Wrapper
 	// -----------------------------------------------------------------
+	if(session_id() == '') session_start();
+	if(!isset($_SESSION['editing'])) { echo "FAIL"; exit; }
+
 	if(isset($_POST['pageid']) && $_POST['pageid'] != "" && isset($_POST['contentArea']) && $_POST['contentArea'] != "" && isset($_POST['contentType']) && $_POST['contentType'] != "" && isset($_POST['content'])) {
 		$edit = new lwCMS_Edit($_POST['pageid'],$_POST['contentArea'],$_POST['contentType'],$_POST['content']);
 		echo $edit->editData(true);

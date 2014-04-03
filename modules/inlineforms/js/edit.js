@@ -9,13 +9,18 @@ function updateInlineformsData() {
 		// Fields
 		$(this).find('.field-row').each(function(){
 			var name = $(this).find('.field-name').val();
-			data += name.replace(/\W/g, '')+"="+encodeURIComponent(name)+"="+($(this).find('.field-required').is(':checked') ? "1" : "0")+"="+$(this).find('.field-type').val()+";";
+			data += name.replace(/\W/g, '')+"="+encodeURIComponent(name)+"="+($(this).find('.field-required').is(':checked') ? "1" : "0")+"="+$(this).find('.field-type').val()+"="+($(this).find('.field-display-name').is(':checked') ? "1" : "0")+";";
 		});
 		data += "==";
 		// Preferences
+		data += ($(this).find('.before-text .left_column').html() != "" ? "before_left="+encodeURIComponent($(this).find('.before-text .left_column').html())+";" : "");
+		data += ($(this).find('.before-text .right_column').html() != "" ? "before_right="+encodeURIComponent($(this).find('.before-text .right_column').html())+";" : "");
+		data += ($(this).find('.after-text .left_column').html() != "" ? "after_left="+encodeURIComponent($(this).find('.after-text .left_column').html())+";" : "");
+		data += ($(this).find('.after-text .right_column').html() != "" ? "after_right="+encodeURIComponent($(this).find('.after-text .right_column').html())+";" : "");
 		data += ($(this).find('.form-db').is(':checked') ? "db=1;" : "");
 		data += ($(this).find('.form-captcha').is(':checked') ? "captcha=1;" : "");
 		data += ($(this).find('.form-email').val() != "" ? "email="+encodeURIComponent($(this).find('.form-email').val())+";" : "");
+		data += ($(this).find('.success-text .success-text-field').html() != "" ? "success_text="+encodeURIComponent($(this).find('.success-text .success-text-field').html())+";" : "");
 		$(this).children('.form-hidden-data').val(data);
 	});
 }
@@ -68,12 +73,16 @@ function getInlineformsOverview() {
 		$('#editing-content').html("");
 		$(data).find("form").each(function(){
 			var data = "<div class='edit-form'>";
-			data += "<div class='form-info'><div class='form-name'><input type='text' value='"+$(this).attr("name")+"' /></div><div class='expandbox'><a class='form-info-expand' href=''>#</a></div></div>";
+			data += "<div class='form-info'><div class='form-name'><input type='text' value='"+$(this).attr("name")+"' /></div><div class='expandbox'><a class='form-info-expand' href=''>#</a><a class='form-delete' href=''>#</a></div></div>";
 			// Get preferences
 			var pref = $(this).find('pref');
 			data += "<div class='form-preferences'><table>";
-			data += "<tr><td>Use CAPTCHA:&nbsp;<input type='checkbox' class='form-captcha' "+(pref.find('captcha').text() == '1' ? "checked='checked'" : "")+"/></td><td></td></tr>";
-			data += "<tr><td>Save data to DB:&nbsp;<input type='checkbox' class='form-db' "+(pref.find('db').text() == '1' ? "checked='checked'" : "")+"/></td><td>Send data to e-mail (sperarate addresses with ';'):&nbsp;<input type='input' class='form-email' value='"+pref.find('email').text()+"'/></td></tr>";
+			data += "<tr><td>Use CAPTCHA:&nbsp;<input type='checkbox' class='form-captcha' "+(pref.find('captcha').text() == '1' ? "checked='checked'" : "")+"/></td><td></td><td></td></tr>";
+			data += "<tr><td>Save data to DB:&nbsp;<input type='checkbox' class='form-db' "+(pref.find('db').text() == '1' ? "checked='checked'" : "")+"/></td><td colspan='2'>Send data to e-mail (sperarate addresses with ';'):&nbsp;<input type='input' class='form-email' value='"+pref.find('email').text()+"'/></td></tr>";
+			data += "<tr><td><div style='float:left;'>Text before form</div>&nbsp;<a class='form-text-expand before' href=''>#</a></td><td><div style='float:left;'>Text after form</div>&nbsp;<a class='form-text-expand after' href=''>#</a></td><td><div style='float:left;'>Success text</div>&nbsp;<a class='form-text-expand success' href=''>#</a></td>";
+			data += "<tr class='before-text'><td><div style='float:left;'>Left column</div><br /><div contenteditable='true' class='left_column new-edit'>"+decodeURIComponent(pref.find('before_left').text()).replace(/\+/g, ' ')+"</div></td><td colspan='2'><div style='float:left;'>Right column</div><br /><div contenteditable='true' class='right_column new-edit'>"+decodeURIComponent(pref.find('before_right').text()).replace(/\+/g, ' ')+"</div></td></tr>";
+			data += "<tr class='after-text'><td><div style='float:left;'>Left column</div><br /><div contenteditable='true' class='left_column new-edit'>"+decodeURIComponent(pref.find('after_left').text()).replace(/\+/g, ' ')+"</div></td><td colspan='2'><div style='float:left;'>Right column</div><br /><div contenteditable='true' class='right_column new-edit'>"+decodeURIComponent(pref.find('after_right').text()).replace(/\+/g, ' ')+"</div></td></tr>";
+			data += "<tr class='success-text'><td colspan='3'><div style='float:left;'>Success text</div><br /><div contenteditable='true' class='success-text-field new-edit'>"+decodeURIComponent(pref.find('success_text').text()).replace(/\+/g, ' ')+"</div></td></tr>";
 			data += "</table></div>";
 			// Get fields
 			data += "<div class='form-fields'><table><tr><th>Name</th><th>Type</th><th>Preferences</th><th>Controls</th></tr>";
@@ -88,7 +97,7 @@ function getInlineformsOverview() {
 				data += "<option value='checkbox' "+($(this).find('type').text() == 'checkbox' ? "selected='selected'" : "")+">Checkbox</option>";
 				data += "<option value='dynamic' "+($(this).find('type').text() == 'dynamic' ? "selected='selected'" : "")+">Dynamic</option>";
 				data += "</select></td>";
-				data += "<td><input type='checkbox' class='field-required' "+($(this).find('req').text() == '1' ? "checked='checked'" : "")+"/>&nbsp;Required field</td>";
+				data += "<td><input type='checkbox' class='field-required' "+($(this).find('req').text() == '1' ? "checked='checked'" : "")+"/>&nbsp;Required field<br /><input type='checkbox' class='field-display-name' "+($(this).find('display_name').text() == '1' ? "checked='checked'" : "")+"/>&nbsp;Display name</td>";
 				data += "<td><a href='#' class='form-field-up'>Up</a>&nbsp;|&nbsp;<a href='#' class='form-field-down'>Down</a>&nbsp;|&nbsp;<a href='#' class='form-field-delete'>Delete</a></td>";
 				data += "</tr>";
 			});
@@ -97,6 +106,17 @@ function getInlineformsOverview() {
 			data += "<input class='form-hidden-data' type='hidden' value='NO_CHANGES' />";
 			data += "</div>";			
 			$('#editing-content').append(data);
+			$('.new-edit').each(function(){
+				$(this).ckeditor({
+					filebrowserBrowseUrl : 'thirdparty/pdw_file_browser/index.php?editor=ckeditor',
+					filebrowserImageBrowseUrl : 'thirdparty/pdw_file_browser/index.php?editor=ckeditor&filter=image',
+					filebrowserFlashBrowseUrl : 'thirdparty/pdw_file_browser/index.php?editor=ckeditor&filter=flash',
+					coreStyles_bold: { element: 'b' },
+					coreStyles_italic: { element: 'i' },
+					enterMode:3
+				});
+				$(this).removeClass('.new-edit');
+			});
 		});
 	});
 }
@@ -107,7 +127,7 @@ $(function(){
 	$('#backend-left-menu').append('&nbsp;|&nbsp;<a class="toolbar-link" id="backend-inlineforms-button" href="#">Forms</a>');
 });
 
-$(document).on('click','.form-info-hide,.form-info-expand',function(){
+$(document).on('click','.form-info-hide,.form-info-expand,.form-delete',function(){
 	var info = $(this).parents('div.form-info');
 	if($(this).hasClass('form-info-hide')) {
 		info.siblings('div').hide();
@@ -121,6 +141,8 @@ $(document).on('click','.form-info-hide,.form-info-expand',function(){
 		info.siblings('div').show();
 		$(this).addClass('form-info-hide');
 		$(this).removeClass('form-info-expand');
+	} else if($(this).hasClass('form-delete')) {
+		$(this).parents('.edit-form:first').remove();
 	}
 	return false;
 });
@@ -131,16 +153,31 @@ $(document).on('click','#backend-inlineforms-button,#edit-button-add_form,.edit-
 		return false;
 	} else if($(this).attr("id") == "edit-button-add_form") {
 		var data = "<div class='edit-form'>";
-		data += "<div class='form-info'><div class='form-name'><input type='text' value='NEW_FORM' /></div><div class='expandbox'><a class='form-info-expand' href=''>#</a></div></div>";
+		data += "<div class='form-info'><div class='form-name'><input type='text' value='NEW_FORM' /></div><div class='expandbox'><a class='form-info-expand' href=''>#</a><a class='form-delete' href=''>#</a></div></div>";
 		data += "<div class='form-preferences'><table>";
-		data += "<tr><td>Use CAPTCHA:&nbsp;<input type='checkbox' class='form-captcha' /></td><td></td></tr>";
-		data += "<tr><td>Save data to DB:&nbsp;<input type='checkbox' class='form-db' /></td><td>Send data to e-mail (sperarate addresses with ';'):&nbsp;<input type='input' class='form-email' value=''/></td></tr>";
+		data += "<tr><td>Use CAPTCHA:&nbsp;<input type='checkbox' class='form-captcha' /></td><td></td><td></td></tr>";
+		data += "<tr><td>Save data to DB:&nbsp;<input type='checkbox' class='form-db' /></td><td colspan='2'>Send data to e-mail (sperarate addresses with ';'):&nbsp;<input type='input' class='form-email' value=''/></td></tr>";
+		data += "<tr><td><div style='float:left;'>Text before form</div>&nbsp;<a class='form-text-expand before' href=''>#</a></td><td><div style='float:left;'>Text after form</div>&nbsp;<a class='form-text-expand after' href=''>#</a></td><td><div style='float:left;'>Success text</div>&nbsp;<a class='form-text-expand success' href=''>#</a></td>";
+		data += "<tr class='before-text'><td><div style='float:left;'>Left column</div><br /><div contenteditable='true' class='left_column new-edit'></div></td><td colspan='2'><div style='float:left;'>Right column</div><br /><div contenteditable='true' class='right_column new-edit'></div></td></tr>";
+		data += "<tr class='after-text'><td><div style='float:left;'>Left column</div><br /><div contenteditable='true' class='left_column new-edit'></div></td><td colspan='2'><div style='float:left;'>Right column</div><br /><div contenteditable='true' class='right_column new-edit'></div></td></tr>";
+		data += "<tr class='success-text'><td colspan='3'><div style='float:left;'>Success text</div><br /><div contenteditable='true' class='success-text-field new-edit'></div></td></tr>";
 		data += "</table></div>";
 		data += "<div class='form-fields'><table><tr><th>Name</th><th>Type</th><th>Preferences</th><th>Controls</th></tr>";
 		data += "</table><button class='edit-form-add-field' type='button'>Add field</button></div>";
 		data += "<input class='form-hidden-data' type='hidden' value='NO_CHANGES' />";
 		data += "</div>";
 		$('#editing-content').append(data);
+		$('.new-edit').each(function(){
+			$(this).ckeditor({
+				filebrowserBrowseUrl : 'thirdparty/pdw_file_browser/index.php?editor=ckeditor',
+				filebrowserImageBrowseUrl : 'thirdparty/pdw_file_browser/index.php?editor=ckeditor&filter=image',
+				filebrowserFlashBrowseUrl : 'thirdparty/pdw_file_browser/index.php?editor=ckeditor&filter=flash',
+				coreStyles_bold: { element: 'b' },
+				coreStyles_italic: { element: 'i' },
+				enterMode:3
+			});
+			$(this).removeClass('.new-edit');
+		});
 		updateInlineformsData();
 		return true;
 	} else if($(this).hasClass('edit-form-add-field')) {
@@ -154,7 +191,7 @@ $(document).on('click','#backend-inlineforms-button,#edit-button-add_form,.edit-
 		data += "<option value='checkbox'>Checkbox</option>";
 		data += "<option value='dynamic'>Dynamic</option>";
 		data += "</select></td>";
-		data += "<td><input type='checkbox' class='field-required' />&nbsp;Required field</td>";
+		data += "<td><input type='checkbox' class='field-required' />&nbsp;Required field<br /><input type='checkbox' class='field-display-name' checked='checked'/>&nbsp;Display name</td>";
 		data += "<td><a href='#' class='form-field-up'>Up</a>&nbsp;|&nbsp;<a href='#' class='form-field-down'>Down</a>&nbsp;|&nbsp;<a href='#' class='form-field-delete'>Delete</a></td>";
 		data += "</tr>";
 		$(this).siblings('table:first').append(data);
@@ -183,6 +220,34 @@ $(document).on('click','#backend-inlineforms-button,#edit-button-add_form,.edit-
 		row.remove();
 		updateInlineformsData();
 		return false;
+	}
+	return false;
+});
+
+$(document).on('click','.form-text-hide,.form-text-expand',function(){
+	if($(this).hasClass('form-text-hide')) {
+		var table = $(this).parents('table:first');
+		table.find('.before-text').hide();
+		table.find('.after-text').hide();
+		table.find('.success-text').hide();
+		$(this).addClass('form-text-expand');
+		$(this).removeClass('form-text-hide');
+	} else if($(this).hasClass('form-text-expand')) {
+		var table = $(this).parents('table:first');
+		table.find('.before-text').hide();
+		table.find('.after-text').hide();
+		table.find('.success-text').hide();
+		table.find('.form-text-hide').addClass('form-text-expand');
+		table.find('.form-text-hide').removeClass('form-text-hide');
+		if($(this).hasClass('before')) {
+			table.find('.before-text').show();
+		} else if($(this).hasClass('after')) {
+			table.find('.after-text').show();
+		} else if($(this).hasClass('success')) {
+			table.find('.success-text').show();
+		}
+		$(this).addClass('form-text-hide');
+		$(this).removeClass('form-text-expand');
 	}
 	return false;
 });
