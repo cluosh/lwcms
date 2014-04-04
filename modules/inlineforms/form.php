@@ -13,6 +13,8 @@
 	// -----------------------------------------------------------------
 	// Execution code
 	// -----------------------------------------------------------------
+	if(session_id() == '') session_start();
+	if(!isset($_SESSION['editing'])) { echo "FAIL"; exit; }
 	if(isset($_GET['form']) && isset($_GET['dyn'])) {
 		$utility = new lwCMS_Utility();
 		$result = $utility->query("SELECT * FROM `".$utility->prefix()."mod_inlineforms` WHERE `form`='".$utility->escape($_GET['form'])."';");
@@ -51,6 +53,14 @@
 					$xml_data .= "<type>".$split[3]."</type>";
 					$xml_data .= "<req>".$split[2]."</req>";
 					$xml_data .= "<display_name>".$split[4]."</display_name>";
+					if(isset($split[5])) {
+						$xml_data .= "<radio_options>";
+						$array = urldecode($split[5]);
+						$array = explode(";;",$array);
+						foreach($array as $button) 
+							$xml_data .= "<button>".$button."</button>";
+						$xml_data .= "</radio_options>";
+					}
 					$xml_data .= "</field>";
 					if(($split[3] == 'text' || $split[3] == 'email' || $split[3] == 'password' || $split[3] == 'textarea') && $split[2] == 1) {
 						$java .= "
@@ -143,8 +153,8 @@
 			foreach($fields as $field) {
 				$split = explode("=",$field);
 				if($split[0] != "") {
-					if(!isset($_POST['form_'.$split[0]]) || ($split[2] == "1" && trim($_POST['form_'.$split[0]]) == "")) {
-						echo $split[1]." is a required field.";
+					if((!isset($_POST['form_'.$split[0]]) || trim($_POST['form_'.$split[0]]) == "") && $split[2] == "1") {
+						echo "<data><error>".$split[1]." is a required field.</error></data>";
 						exit;
 					}
 					if($split[3] == 'dynamic') {
@@ -153,7 +163,8 @@
 						$object = $className($utility);
 						$object->php_check($split[0]);
 					}
-					$data .= $split[1].": ".$_POST['form_'.$split[0]]."\n";
+					if(isset($_POST['form_'.$split[0]])) 
+						$data .= $split[1].": ".$_POST['form_'.$split[0]]."\n";
 				}
 			}
 			// Check for CAPTCHA
@@ -161,13 +172,13 @@
 				if(session_id() == '') session_start();
 				if(!isset($_SESSION['captcha']) || $_SESSION['captcha'] == false) {
 					if(!isset($_POST['captcha_code']) || $_POST['captcha_code'] == "") {
-						echo "No CAPTCHA Code entered.";
+						echo "<data><error>No CAPTCHA Code entered.</error></data>";
 						exit;
 					}
 					include_once('securimage/securimage.php');
 					$securimage = new Securimage();
 					if ($securimage->check($_POST['captcha_code']) == false) {
-						echo "Wrong CAPTCHA Code.";
+						echo "<data><error>Wrong CAPTCHA Code.</error></data>";
 						exit;
 					}
 				}

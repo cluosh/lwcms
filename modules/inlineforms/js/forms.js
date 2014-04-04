@@ -53,10 +53,18 @@ $(document).on('click','a.inlineform',function(){
 						form += "<td class='input-field'><input type='text' name='form_"+$(this).attr('name')+"' /></td>";
 						break;
 					case 'dynamic':
-						form += "<td class='input-field'>"+$(this).find('content')+"</td>";
+						form += "<td class='input-field'>"+decodeURIComponent($(this).find('content').text()).replace(/\+/g, ' ')+"</td>";
 						break;
 					case 'checkbox':
 						form += "<td class='input-field'><input type='text' name='form_"+$(this).attr('name')+"'</td>";
+						break;
+					case 'radio':
+						form += "<td class='input-field'>";
+						var name = $(this).attr('name');
+						$(this).find('radio_options').find('button').each(function(){
+							form += "<input type='radio' name='form_"+name+"' value='"+$(this).text()+"' />&nbsp;"+$(this).text()+"&nbsp;"; 
+						});
+						form += "</td>";
 						break;
 				}
 				form += "</tr>";

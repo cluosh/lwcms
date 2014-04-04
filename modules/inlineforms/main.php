@@ -82,6 +82,7 @@
 							$xml_data .= "<type>".$split[3]."</type>";
 							$xml_data .= "<req>".$split[2]."</req>";
 							$xml_data .= "<display_name>".$split[4]."</display_name>";
+							$xml_data .= (isset($split[5]) ? "<radio_options>".urldecode($split[5])."</radio_options>" : "");
 							$xml_data .= "</field>";
 						}
 					}

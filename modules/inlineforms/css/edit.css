@@ -8,6 +8,10 @@
 	margin-top:5px;
 }
 
+.field-row td {
+	border-top:1px solid grey;
+}
+
 .form-preferences {
 	border-top: 1px solid black;
 	display:none;

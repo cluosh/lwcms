@@ -9,7 +9,10 @@ function updateInlineformsData() {
 		// Fields
 		$(this).find('.field-row').each(function(){
 			var name = $(this).find('.field-name').val();
-			data += name.replace(/\W/g, '')+"="+encodeURIComponent(name)+"="+($(this).find('.field-required').is(':checked') ? "1" : "0")+"="+$(this).find('.field-type').val()+"="+($(this).find('.field-display-name').is(':checked') ? "1" : "0")+";";
+			if($(this).find('.field-type').val() == 'radio') 
+				data += name.replace(/\W/g, '')+"="+encodeURIComponent(name)+"="+($(this).find('.field-required').is(':checked') ? "1" : "0")+"="+$(this).find('.field-type').val()+"="+($(this).find('.field-display-name').is(':checked') ? "1" : "0")+"="+encodeURIComponent($(this).find('.radio-options').val())+";";
+			else
+				data += name.replace(/\W/g, '')+"="+encodeURIComponent(name)+"="+($(this).find('.field-required').is(':checked') ? "1" : "0")+"="+$(this).find('.field-type').val()+"="+($(this).find('.field-display-name').is(':checked') ? "1" : "0")+";";
 		});
 		data += "==";
 		// Preferences
@@ -95,9 +98,10 @@ function getInlineformsOverview() {
 				data += "<option value='textarea' "+($(this).find('type').text() == 'textarea' ? "selected='selected'" : "")+">Textarea</option>";
 				data += "<option value='email' "+($(this).find('type').text() == 'email' ? "selected='selected'" : "")+">E-Mail</option>";
 				data += "<option value='checkbox' "+($(this).find('type').text() == 'checkbox' ? "selected='selected'" : "")+">Checkbox</option>";
+				data += "<option value='radio' "+($(this).find('type').text() == 'radio' ? "selected='selected'" : "")+">Radio-Buttons</option>";
 				data += "<option value='dynamic' "+($(this).find('type').text() == 'dynamic' ? "selected='selected'" : "")+">Dynamic</option>";
 				data += "</select></td>";
-				data += "<td><input type='checkbox' class='field-required' "+($(this).find('req').text() == '1' ? "checked='checked'" : "")+"/>&nbsp;Required field<br /><input type='checkbox' class='field-display-name' "+($(this).find('display_name').text() == '1' ? "checked='checked'" : "")+"/>&nbsp;Display name</td>";
+				data += "<td><input type='checkbox' class='field-required' "+($(this).find('req').text() == '1' ? "checked='checked'" : "")+"/>&nbsp;Required field<br /><input type='checkbox' class='field-display-name' "+($(this).find('display_name').text() == '1' ? "checked='checked'" : "")+"/>&nbsp;Display name"+($(this).find('type').text() == 'radio' ? "<br />Options (separate with ';;'):&nbsp;<input type='text' class='radio-options' value='"+$(this).find('radio_options').text()+"'/>" : "")+"</td>";
 				data += "<td><a href='#' class='form-field-up'>Up</a>&nbsp;|&nbsp;<a href='#' class='form-field-down'>Down</a>&nbsp;|&nbsp;<a href='#' class='form-field-delete'>Delete</a></td>";
 				data += "</tr>";
 			});
@@ -189,6 +193,7 @@ $(document).on('click','#backend-inlineforms-button,#edit-button-add_form,.edit-
 		data += "<option value='textarea'>Textarea</option>";
 		data += "<option value='email'>E-Mail</option>";
 		data += "<option value='checkbox'>Checkbox</option>";
+		data += "<option value='radio'>Radio-Buttons</option>";
 		data += "<option value='dynamic'>Dynamic</option>";
 		data += "</select></td>";
 		data += "<td><input type='checkbox' class='field-required' />&nbsp;Required field<br /><input type='checkbox' class='field-display-name' checked='checked'/>&nbsp;Display name</td>";
@@ -250,4 +255,14 @@ $(document).on('click','.form-text-hide,.form-text-expand',function(){
 		$(this).removeClass('form-text-expand');
 	}
 	return false;
+});
+
+$(document).on('change','.field-type',function(){
+	if($(this).val() == 'radio') {
+		$(this).parents('tr:first').find('.field-required').parents('td:first').append("<br />Options (separate with ';;'):&nbsp;<input type='text' class='radio-options' />");
+	} else {
+		if($(this).parents('tr:first').find('.radio-options').length) {
+			$(this).parents('tr:first').find('.radio-options').remove();
+		}
+	}
 });
