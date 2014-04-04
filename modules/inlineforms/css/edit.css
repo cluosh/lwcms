@@ -25,6 +25,12 @@
 	padding:2px;
 }
 
+.dyndata-edit {
+	border-top: 1px solid black;
+	display:none;
+	padding:2px;
+}
+
 .form-name {
 	float:left;
 }

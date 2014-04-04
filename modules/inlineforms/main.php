@@ -39,12 +39,20 @@
 				$forms = array();
 				foreach($chunks as $form) {
 					$form_split = explode("==",$form);
-					if(count($form_split) == 3) {
+					if(count($form_split) >= 3) {
 						// General form data
 						$name = $utility->escape($form_split[0]);
 						$fields = $utility->escape(substr($form_split[1],0,-1));
 						$checks = $utility->escape(substr($form_split[2],0,-1));
 						array_push($forms,"INSERT INTO `".$utility->prefix()."mod_inlineforms` VALUES ('".$name."','".$fields."','".$checks."');");					
+						if(count($form_split) == 4) {
+							if(file_exists(dirname(__FILE__).'/../../forms/'.$form_split[0].'/dyn.php')) {
+								include(dirname(__FILE__).'/../../forms/'.$form_split[0].'/dyn.php');
+								$className = 'lwCMS_dyn_'.$form_split[0];
+								$object = new $className($utility);
+								$object->editSave($form_split[3]);
+							}
+						}
 					} 
 				}
 				// Delete old data from DB
@@ -69,6 +77,13 @@
 						$split = explode("=",$param);
 						if(count($split) == 2)
 							$xml_data .= "<".$split[0].">".$split[1]."</".$split[0].">";
+					}
+					if(file_exists(dirname(__FILE__).'/../../forms/'.$row['form'].'/dyn.php')) {
+						include(dirname(__FILE__).'/../../forms/'.$row['form'].'/dyn.php');
+						$className = 'lwCMS_dyn_'.$row['form'];
+						$object = new $className($utility);
+						$xml_data .= "<dyn>".urlencode($object->editData())."</dyn>";
+						$xml_data .= (file_exists(dirname(__FILE__).'/../../forms/'.$row['form'].'/js/edit.js') ? "<dyn_javascript>".urlencode(file_get_contents(dirname(__FILE__).'/../../forms/'.$row['form'].'/js/edit.js'))."</dyn_javascript>" : "");
 					}
 					$xml_data .= "</pref>";
 					// Fields

@@ -119,7 +119,8 @@ function validateEmail(sEmail) {
 $(document).on('submit','form.inlineform',function(){
 	var formdata = $(this).serialize();
 	
-	form_checks();
+	if(!form_checks())
+		return false;
 
 	// Check if cookies are enabled
 	var backup = document.cookie;

@@ -116,3 +116,10 @@ $(function(){
 		$('#'+curContentArea).click();
 	});
 });
+
+$(document).on('click','#edit-button-close',function(){
+	// Clean up popup
+	$('#editing-content').html("");
+	$('#editing-popup').hide();
+	$('#editing-popup-background').hide();
+});

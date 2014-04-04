@@ -37,7 +37,7 @@
 			if(file_exists(dirname(__FILE__).'/../../forms/'.$name.'/dyn.php')) {
 				include(dirname(__FILE__).'/../../forms/'.$name.'/dyn.php');
 				$className = 'lwCMS_dyn_'.$name;
-				$object = $className($utility,$_GET['dyn']);
+				$object = new $className($utility,$_GET['dyn']);
 				$xml_data .= $object->before_after();
 			}
 			$xml_data .= "</pref>";
@@ -83,10 +83,16 @@
 							";
 						}
 					}
-					if($split[3] == 'dynamic' && $split[2] == 1) {
+					if($split[3] == 'radio' && $split[2] == 1) {
+						$java .= "
+						if (!$('form.inlineform input[name=\"form_".$split[0]."\"]:checked').val()) {
+							alert('".urldecode($split[1])." is a required field.');
+							return false;
+						}";
+					} elseif($split[3] == 'dynamic' && $split[2] == 1) {
 						include(dirname(__FILE__).'/../../forms/'.$name.'/dyn.php');
 						$className = 'lwCMS_dyn_'.$name;
-						$object = $className($utility,$_GET['dyn']);
+						$object = new $className($utility,$_GET['dyn']);
 						$java .= $object->javascript_check($split[0]);
 					}
 				}
@@ -103,7 +109,7 @@
 				";
 			}
 			$xml_data .= "<javascript>";
-			$xml_data .= urlencode("function form_checks() {".$java."}");
+			$xml_data .= urlencode("function form_checks() {".$java." return true;}");
 			$xml_data .= "</javascript>";
 			$xml_data .= "</form>";
 			echo $xml_data;
@@ -138,7 +144,7 @@
 						case 'emails':
 							$emails = explode(";",urldecode($split[2]));
 							break;
-						case 'catpcha':
+						case 'captcha':
 							$captcha = $split[1];
 							break;
 						case 'success_text':
@@ -160,7 +166,7 @@
 					if($split[3] == 'dynamic') {
 						include(dirname(__FILE__).'/../../forms/'.$name.'/dyn.php');
 						$className = 'lwCMS_dyn_'.$name;
-						$object = $className($utility);
+						$object = new $className($utility,$_GET['dyn']);
 						$object->php_check($split[0]);
 					}
 					if(isset($_POST['form_'.$split[0]])) 
@@ -168,7 +174,7 @@
 				}
 			}
 			// Check for CAPTCHA
-			if($captcha == "1") {
+			if($captcha) {
 				if(session_id() == '') session_start();
 				if(!isset($_SESSION['captcha']) || $_SESSION['captcha'] == false) {
 					if(!isset($_POST['captcha_code']) || $_POST['captcha_code'] == "") {

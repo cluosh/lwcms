@@ -25,6 +25,11 @@ function updateInlineformsData() {
 		data += ($(this).find('.form-email').val() != "" ? "email="+encodeURIComponent($(this).find('.form-email').val())+";" : "");
 		data += ($(this).find('.success-text .success-text-field').html() != "" ? "success_text="+encodeURIComponent($(this).find('.success-text .success-text-field').html())+";" : "");
 		$(this).children('.form-hidden-data').val(data);
+		// Dyn-Data
+		if($(this).find('.dyn-data').length) {
+			$data += "==";
+			$data += decodeURIComponent($(this).find('.dyn-data').val());
+		}
 	});
 }
 
@@ -106,6 +111,12 @@ function getInlineformsOverview() {
 				data += "</tr>";
 			});
 			data += "</table><button class='edit-form-add-field' type='button'>Add field</button></div>";
+			// Dyn data area
+			if(pref.find('dyn').length) {
+				var xml = decodeURIComponent($(this).find('dyn').text()).replace(/\+/g, ' ');
+				data += "<div class='dyndata-edit'><input type='hidden' class='dyn-data' value='"+xml+"' />";
+				data += "<script type='text/javascript'>"+decodeURIComponent($(this).find('dyn_javascript').text()).replace(/\+/g, ' ')+"</script></div>";
+			}
 			// Close open tags
 			data += "<input class='form-hidden-data' type='hidden' value='NO_CHANGES' />";
 			data += "</div>";			
