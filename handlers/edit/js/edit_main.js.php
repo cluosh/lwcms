@@ -91,11 +91,13 @@ $(function(){
 			}
 		});
 	});
-	$('#edit-button-discard,#editing-popup-background,#edit-button-close').bind('click',function(){
+	$('#edit-button-discard,#editing-popup-background').bind('click',function(){
 		// Clean up popup
-		$('#editing-content').html("");
-		$('#editing-popup').hide();
-		$('#editing-popup-background').hide();
+		if(!$('#edit-button-accept').is(':visible') || confirm("Do you really want to discard the changes?")) {
+			$('#editing-content').html("");
+			$('#editing-popup').hide();
+			$('#editing-popup-background').hide();
+		}
 	});
 	$('#backend-edit-button').bind('click',function(){
 		$(this).toggleClass("active");
@@ -110,8 +112,9 @@ $(function(){
 		return false;
 	});
 	$('#edit-content-selection').bind('change',function(){
-		$('#'+curContentArea).removeClass('area'+curContentType);
-		$('#'+curContentArea).addClass('area'+$('#edit-content-selection option:selected').val());
+		alert(curContentArea);
+		$('#'+curContentArea).removeClass('area_'+curContentType);
+		$('#'+curContentArea).addClass('area_'+$('#edit-content-selection option:selected').val());
 		$('#editing-content').html("");
 		$('#'+curContentArea).click();
 	});

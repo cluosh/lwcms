@@ -31,8 +31,8 @@
 			$type_info = file_get_contents($this->type_cache);
 			$type_info = explode(";",$type_info);
 			foreach($type_info as $type) {
-				$type_data = explode(";",$type);
-				if(count($type_data) == 2) $this->typeinfo[$type[0]] = $type[1];
+				$type_data = explode("=",$type);
+				if(count($type_data) == 2) $this->typeinfo[$type_data[0]] = $type_data[1];
 			}
 		}
 		
@@ -51,8 +51,9 @@
 			if(func_num_args() == 1) {
 				$id = $this->page->pageInfo();
 				$result = $this->page->query("SELECT `contentArea`,`contentType`,`content` FROM `".$this->page->prefix()."pages_content` WHERE `pageID`='".$this->page->escape($id['ID'])."' AND `contentArea`='".$this->page->escape(func_get_arg(0))."';");
-			} else
+			} else {
 				$result = $this->page->query("SELECT `contentArea`,`contentType`,`content` FROM `".$this->page->prefix()."pages_content` WHERE `pageID`='".$this->page->escape(func_get_arg(1))."' AND `contentArea`='".$this->page->escape(func_get_arg(0))."';");
+			}
 			if($result->num_rows == 1) 
 				return $result->fetch_assoc();
 			else
@@ -63,7 +64,7 @@
 		private function createContentAreaData($areaname) {
 			$content = array();
 			$content['contentArea'] = $areaname;
-			$content['contentType'] = (isset($this->type_info[$areaname]) ? $this->type_info[$areaname] : 'default');
+			$content['contentType'] = (isset($this->typeinfo[$areaname]) ? $this->typeinfo[$areaname] : 'default');
 			$content['content'] = "";
 			$id = $this->page->pageInfo();
 			$this->page->query("INSERT INTO `".$this->page->prefix()."pages_content` VALUES ('".$this->page->escape($id['ID'])."','".$this->page->escape($areaname)."','".$this->page->escape($content['contentType'])."','');");
@@ -79,8 +80,8 @@
 			// Check if there is an entry in DB
 			$area = $this->getContentAreaData($areaName);
 			if($area == -1) {
-				$area = $this->createContentArea($areaName);
 				// Content is empty, try to load content from homepage
+				$area = $this->createContentAreaData($areaName);
 				$home_area = $this->getContentAreaData($areaName,1);
 				if($home_area != -1) $area['content'] = $home_area['content'];
 			} else {

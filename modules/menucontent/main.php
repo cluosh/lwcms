@@ -101,7 +101,7 @@
 				array_push($pages_array,$row['pageID_string']);
 			$data = implode("!!",$pages_array);
 			$data .= "!!DATA!!";
-			$menuContent = $utility->query("SELECT `content` FROM `".$utility->prefix()."pages_content` WHERE `pageID`='".$utility->escape($utility->content['pageID'])."' AND `contentArea`='".$utility->escape($utility->content['contentArea'])."';");
+			$menuContent = $utility->query("SELECT `content` FROM `".$utility->prefix()."pages_content` WHERE `pageID`='".$utility->escape($utility->content['pageID'])."' AND `contentArea`='".$utility->escape($utility->content['contentArea'])."' AND `contentType`='menucontent';");
 			if($menuContent->num_rows == 1) {
 				$array = $menuContent->fetch_assoc();
 				$data .= $array['content'];

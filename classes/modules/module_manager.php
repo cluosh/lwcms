@@ -44,7 +44,7 @@
 		}
 		
 		// Load a single module
-		private function loadModule($modulename) {
+		public function loadModule($modulename) {
 			// Include module
 			if(!file_exists($this->modulesdir.$modulename.'/main.php')) return;
 			require_once($this->modulesdir.$modulename.'/main.php');

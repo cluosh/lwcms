@@ -65,7 +65,7 @@
 		// Return menu overview for editing purposes
 		public function editData($utility) { 
 			// Query database
-			$data = $utility->query("SELECT `content` FROM `".$utility->prefix()."pages_content` WHERE `pageID`='".$utility->escape($utility->content['pageID'])."' AND `contentArea`='".$utility->escape($utility->content['contentArea'])."';");
+			$data = $utility->query("SELECT `content` FROM `".$utility->prefix()."pages_content` WHERE `pageID`='".$utility->escape($utility->content['pageID'])."' AND `contentArea`='".$utility->escape($utility->content['contentArea'])."' AND `contentType`='imagelistcontent';");
 			if($data->num_rows == 1) {
 				$array = $data->fetch_assoc();
 				return $array['content'];

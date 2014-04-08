@@ -26,10 +26,10 @@ function updateInlineformsData() {
 		data += ($(this).find('.success-text .success-text-field').html() != "" ? "success_text="+encodeURIComponent($(this).find('.success-text .success-text-field').html())+";" : "");
 		$(this).children('.form-hidden-data').val(data);
 		// Dyn-Data
-		if($(this).find('.dyn-data').length) {
+		/*if($(this).find('.dyn-data').length) {
 			$data += "==";
 			$data += decodeURIComponent($(this).find('.dyn-data').val());
-		}
+		}*/
 	});
 }
 
@@ -86,7 +86,7 @@ function getInlineformsOverview() {
 			var pref = $(this).find('pref');
 			data += "<div class='form-preferences'><table>";
 			data += "<tr><td>Use CAPTCHA:&nbsp;<input type='checkbox' class='form-captcha' "+(pref.find('captcha').text() == '1' ? "checked='checked'" : "")+"/></td><td></td><td></td></tr>";
-			data += "<tr><td>Save data to DB:&nbsp;<input type='checkbox' class='form-db' "+(pref.find('db').text() == '1' ? "checked='checked'" : "")+"/></td><td colspan='2'>Send data to e-mail (sperarate addresses with ';'):&nbsp;<input type='input' class='form-email' value='"+pref.find('email').text()+"'/></td></tr>";
+			data += "<tr><td>Save data to DB:&nbsp;<input type='checkbox' class='form-db' "+(pref.find('db').text() == '1' ? "checked='checked'" : "")+"/></td><td colspan='2'>Send data to e-mail (sperarate addresses with ';'):&nbsp;<input type='input' class='form-email' value='"+decodeURIComponent(pref.find('email').text()).replace(/\+/g, ' ')+"'/></td></tr>";
 			data += "<tr><td><div style='float:left;'>Text before form</div>&nbsp;<a class='form-text-expand before' href=''>#</a></td><td><div style='float:left;'>Text after form</div>&nbsp;<a class='form-text-expand after' href=''>#</a></td><td><div style='float:left;'>Success text</div>&nbsp;<a class='form-text-expand success' href=''>#</a></td>";
 			data += "<tr class='before-text'><td><div style='float:left;'>Left column</div><br /><div contenteditable='true' class='left_column new-edit'>"+decodeURIComponent(pref.find('before_left').text()).replace(/\+/g, ' ')+"</div></td><td colspan='2'><div style='float:left;'>Right column</div><br /><div contenteditable='true' class='right_column new-edit'>"+decodeURIComponent(pref.find('before_right').text()).replace(/\+/g, ' ')+"</div></td></tr>";
 			data += "<tr class='after-text'><td><div style='float:left;'>Left column</div><br /><div contenteditable='true' class='left_column new-edit'>"+decodeURIComponent(pref.find('after_left').text()).replace(/\+/g, ' ')+"</div></td><td colspan='2'><div style='float:left;'>Right column</div><br /><div contenteditable='true' class='right_column new-edit'>"+decodeURIComponent(pref.find('after_right').text()).replace(/\+/g, ' ')+"</div></td></tr>";
