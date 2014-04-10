@@ -106,12 +106,19 @@ $(document).on('change','.pages-id,.pages-title,.template-select,.theme-select',
 	} else if($(this).hasClass("theme-select")) {
 		contentVal = "theme_name="+$(this).val();
 	}
+	var pageid_string = $(this).parents('tr:first').find('.pages-title').val();
 	$.ajax({
 		type:'POST',
 		url:'modules/pagesedit/db_changes.php',
 		data:{pageid:$(this).parents('tr:first').attr('id').split("_")[1],action:'change',content:contentVal},
 		async:false
-	})
+	}).done(function(data){
+		$.ajax({
+			type:'GET',
+			url:'index.php',
+			data:{page:pageid_string}
+		});
+	});
 });
 
 $(document).on('input','.pages-id,.pages-title',function(){
@@ -152,6 +159,11 @@ $(document).on('click','#edit-button-add_page',function(){
 			$('#page_'+data+' .theme-select').val(default_theme);
 			$('#page_'+data+' .theme-'+default_theme).show();
 			$('#page_'+data+' .theme-'+default_theme).val(default_template);
+			$.ajax({
+				type:'GET',
+				url:'index.php',
+				data:{page:'new_page'}
+			});
 		}
 	});
 });
