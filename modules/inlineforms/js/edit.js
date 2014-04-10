@@ -139,7 +139,7 @@ function getInlineformsOverview() {
 // Do things on load
 $(function(){
 	// Add button to header edit menu
-	$('#backend-left-menu').append('&nbsp;|&nbsp;<a class="toolbar-link" id="backend-inlineforms-button" href="#">Forms</a>');
+	$('#backend-left-menu').append('&nbsp;|&nbsp;<a class="toolbar-link" id="backend-inlineforms-button" href="#" title="Add/edit/delete forms.">Forms</a>');
 });
 
 $(document).on('click','.form-info-hide,.form-info-expand,.form-delete',function(){

@@ -11,7 +11,7 @@ var default_template = "";
 // Do things on load
 $(function(){
 	// Add button to header edit menu
-	$('<font>&nbsp;|&nbsp;</font><a class="toolbar-link" id="backend-pages-button" href="#">Pages</a>').insertAfter('#backend-edit-button');
+	$('<font>&nbsp;|&nbsp;</font><a class="toolbar-link" id="backend-pages-button" href="#" title="Display overview of all pages and add/delete/edit existing pages.">Pages</a>').insertAfter('#backend-edit-button');
 });
 
 // Open up editing popup

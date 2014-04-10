@@ -41,7 +41,7 @@
 		// Editing header
 		public function editingHeaderInfo() { 
 			return "<script type='text/javascript' src='modules/pagesedit/js/edit.js'></script>
-			<link rel='stylesheet' type='text'css' href='modules/pagesedit/css/edit.css' />";
+			<link rel='stylesheet' type='text/css' href='modules/pagesedit/css/edit.css' />";
 		}
 		
 		// Save data from edit forms

@@ -35,7 +35,7 @@ $(function(){
 	// Add editing toolbar
 	$('body').prepend('<div id="backend-edit-toolbar"></div>');
 	// Left menu
-	$('#backend-edit-toolbar').append('<div id="backend-left-menu"><a href="#" id="backend-edit-button" class="toolbar-link">Edit</a></div>');
+	$('#backend-edit-toolbar').append('<div id="backend-left-menu"><a href="#" id="backend-edit-button" class="toolbar-link" title="Click here to activate edit mode in order to make changes. When you\'re done, click again, to exit edit mode">Edit</a></div>');
 	// Right menu
 	$('#backend-edit-toolbar').append('<div id="backend-right-menu"><a href="index.php?logout=<?php echo (isset($_GET['edit_page']) && $_GET['edit_page'] != "" ? $_GET['edit_page'] : "home"); ?>" id="backend-logout-button" class="toolbar-link">Logout</a></div>');
 	
