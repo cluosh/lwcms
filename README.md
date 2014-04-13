@@ -12,7 +12,7 @@ lwCMS does not have an installer yet, and therefore must be configured manually.
 A few thirdparty products are needed for lwCMS to work:
 * securimage
 * CKEditor
-* PDW File Browser
-* SlidesJS
+* PDW File Browser (PDW File Browser needs its own configuration)
+* SlidesJS (the jquery-slidesjs.min.js needs to be in a directory called slidesjs)
 
-After the directory structure is set up, the *.sql files need to be imported to the database.
+After the directory structure is set up, the db_structure.sql file needs to be imported to the database. The last line specifies the hash for the default admin user, the default password is *admin*. 
