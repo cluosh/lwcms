@@ -52,9 +52,6 @@ $(document).on('click','a.inlineform',function(){
 					case 'email':
 						form += "<td class='input-field'><input type='text' name='form_"+$(this).attr('name')+"' /></td>";
 						break;
-					case 'dynamic':
-						form += "<td class='input-field'>"+decodeURIComponent($(this).find('content').text()).replace(/\+/g, ' ')+"</td>";
-						break;
 					case 'checkbox':
 						form += "<td class='input-field'><input type='text' name='form_"+$(this).attr('name')+"'</td>";
 						break;
@@ -65,6 +62,16 @@ $(document).on('click','a.inlineform',function(){
 							form += "<input type='radio' name='form_"+name+"' value='"+$(this).text()+"' />&nbsp;"+$(this).text()+"&nbsp;"; 
 						});
 						form += "</td>";
+						break;
+					case 'payment':
+						form += "<td class='input-field'>";
+						form += "<input type='radio' name='form_"+$(this).attr('name')+"' value='bank' class='bank-transfer'> Bank Transfer<br />";
+						form += "<input type='radio' name='form_"+$(this).attr('name')+"' class='credit-card' value='american_express'> American Express <input type='radio' name='form_"+$(this).attr('name')+"' class='credit-card' value='visa'> Visa <input type='radio' name='form_"+$(this).attr('name')+"' class='credit-card' value='mastercard'> Mastercard <br />";
+						form += "<div class='payment-info' style='display:none;'><br /><input type='text' name='form_"+$(this).attr('name')+"_card_no' /> Card No. <br /><input type='text' name='form_"+$(this).attr('name')+"_card_holder' /> Card Holder<br /><input type='text' name='form_"+$(this).attr('name')+"_expire_date' /> Expire Date</div>";
+						form += "</td>";
+						break;
+					case 'dynamic':
+						form += "<td class='input-field'>"+decodeURIComponent($(this).find('content').text()).replace(/\+/g, ' ')+"</td>";
 						break;
 				}
 				form += "</tr>";

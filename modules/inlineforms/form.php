@@ -63,6 +63,7 @@
 			$xml_data .= "<fields>";
 			$fields = explode(";",$data['fields']);
 			$java = "";
+			$jquery_code = "";
 			foreach($fields as $field) {
 				$split = explode("=",$field);
 				if($split[0] != "") {
@@ -112,6 +113,42 @@
 						$className = 'lwCMS_dyn_'.$name;
 						$object = new $className($utility,$_GET['dyn']);
 						$java .= $object->javascript_check($split[0]);
+					} elseif($split[3] == 'payment') {
+						if($split[2] == 1) {
+							$java .= "
+							if (!$('form.inlineform input[name=form_".$split[0]."]:checked').val()) {
+							alert('".urldecode($split[1])." is a required field.');
+							return false;
+							}
+							if($('form.inlineform input[name=form_".$split[0]."]:checked').val() != 'bank')
+							{
+								if(/^\s*$/.test($('form.inlineform input[name=form_".$split[0]."_card_no]').val()))
+								{
+									alert('Please enter the Credit Card No.');
+									$('form.inlineform input[name=form_".$split[0]."_card_no]').focus();
+									return false;
+								}
+								if(/^\s*$/.test($('form.inlineform input[name=form_".$split[0]."_card_holder]').val()))
+								{
+									alert('Please enter the Card Holder Name.');
+									$('form.inlineform input[name=form_".$split[0]."_card_holder]').focus();
+									return false;
+								}
+								if(/^\s*$/.test($('form.inlineform input[name=form_".$split[0]."_expire_date]').val()))
+								{
+									alert('Please enter the Card\'s Expiry Date.');
+									$('form.inlineform input[name=form_".$split[0]."_card_holder]').focus();
+									return false;
+								}
+							}";
+						}
+						$jquery_code .= "$(document).on('click','.credit-card,.bank-transfer',function(){
+							if($(this).hasClass('credit-card')) {
+								$(this).siblings('.payment-info').show();
+							} else {
+								$(this).siblings('.payment-info').hide();
+							}
+						});";
 					}
 				}
 			}
@@ -127,7 +164,7 @@
 				";
 			}
 			$xml_data .= "<javascript>";
-			$xml_data .= urlencode("function form_checks() {".$java." return true;}");
+			$xml_data .= urlencode("function form_checks() {".$java." return true;}\n".$jquery_code);
 			$xml_data .= "</javascript>";
 			$xml_data .= "</form>";
 			echo $xml_data;
@@ -189,6 +226,14 @@
 					}
 					if(isset($_POST['form_'.$split[0]])) 
 						$data .= $split[1].": ".$_POST['form_'.$split[0]]."\n";
+					if($split[3] == 'payment' && $split[2] == "1" && $_POST['form_'.$split[0]] != 'bank' && (!isset($_POST['form_'.$split[0].'_card_no']) || trim($_POST['form_'.$split[0].'_card_no']) == "" || !isset($_POST['form_'.$split[0].'_card_holder']) || trim($_POST['form_'.$split[0].'_card_holder']) == "" || !isset($_POST['form_'.$split[0].'_expire_date']) || trim($_POST['form_'.$split[0].'_expire_date']) == "")) {
+						echo "<data><error>Credit card informations are required fields.</error></data>";
+						exit;
+					} elseif($split[3] == 'payment' && $_POST['form_'.$split[0]] != 'bank') {
+						$data .= "Card No: ".$_POST['form_'.$split[0].'_card_no']."\n";
+						$data .= "Card Holder: ".$_POST['form_'.$split[0].'_card_holder']."\n";
+						$data .= "Expire Date: ".$_POST['form_'.$split[0].'_expire_date']."\n";
+					}
 				}
 			}
 			// Check for CAPTCHA

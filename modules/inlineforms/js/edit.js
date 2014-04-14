@@ -104,6 +104,7 @@ function getInlineformsOverview() {
 				data += "<option value='email' "+($(this).find('type').text() == 'email' ? "selected='selected'" : "")+">E-Mail</option>";
 				data += "<option value='checkbox' "+($(this).find('type').text() == 'checkbox' ? "selected='selected'" : "")+">Checkbox</option>";
 				data += "<option value='radio' "+($(this).find('type').text() == 'radio' ? "selected='selected'" : "")+">Radio-Buttons</option>";
+				data += "<option value='payment' "+($(this).find('type').text() == 'payment' ? "selected='selected'" : "")+">Bank-Data / Payment</option>";
 				data += "<option value='dynamic' "+($(this).find('type').text() == 'dynamic' ? "selected='selected'" : "")+">Dynamic</option>";
 				data += "</select></td>";
 				data += "<td><input type='checkbox' class='field-required' "+($(this).find('req').text() == '1' ? "checked='checked'" : "")+"/>&nbsp;Required field<br /><input type='checkbox' class='field-display-name' "+($(this).find('display_name').text() == '1' ? "checked='checked'" : "")+"/>&nbsp;Display name"+($(this).find('type').text() == 'radio' ? "<br />Options (separate with ';;'):&nbsp;<input type='text' class='radio-options' value='"+$(this).find('radio_options').text()+"'/>" : "")+"</td>";
@@ -205,6 +206,7 @@ $(document).on('click','#backend-inlineforms-button,#edit-button-add_form,.edit-
 		data += "<option value='email'>E-Mail</option>";
 		data += "<option value='checkbox'>Checkbox</option>";
 		data += "<option value='radio'>Radio-Buttons</option>";
+		data += "<option value='payment' >Bank-Data / Payment</option>";
 		data += "<option value='dynamic'>Dynamic</option>";
 		data += "</select></td>";
 		data += "<td><input type='checkbox' class='field-required' />&nbsp;Required field<br /><input type='checkbox' class='field-display-name' checked='checked'/>&nbsp;Display name</td>";
