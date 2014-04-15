@@ -28,6 +28,9 @@
 	// Include module base class
 	require_once(dirname(__FILE__).'/../../classes/modules/module.php');
 	
+	// Include dynamic forms base class
+	require_once(dirname(__FILE__).'/dyn_base.php');
+	
 	// -----------------------------------------------------------------
 	// class lwCMS_inlineforms: Inlineforms main class
 	// -----------------------------------------------------------------
@@ -61,6 +64,19 @@
 						// General form data
 						$name = $utility->escape($form_split[0]);
 						$fields = $utility->escape(substr($form_split[1],0,-1));
+						// Process fields
+						$field_split = explode(";",$fields);
+						$field_array = array();
+						foreach($field_split as $field) {
+							$field = explode("=",$field);
+							$field[0] = urldecode($field[0]);
+							$field[0] = strip_tags($field[0]);
+							$field[0] = preg_replace("/[^A-Za-z0-9\-_]/", '', $field[0]);
+							$field[0] = strtolower($field[0]);
+							$field_array[count($field_array)] = implode("=",$field);
+						}
+						$fields = implode(";",$field_array);
+						// Write to DB
 						$checks = $utility->escape(substr($form_split[2],0,-1));
 						array_push($forms,"INSERT INTO `".$utility->prefix()."mod_inlineforms` VALUES ('".$name."','".$fields."','".$checks."');");					
 						if(count($form_split) == 4) {
@@ -68,7 +84,7 @@
 								include(dirname(__FILE__).'/../../forms/'.$form_split[0].'/dyn.php');
 								$className = 'lwCMS_dyn_'.$form_split[0];
 								$object = new $className($utility);
-								$object->editSave($form_split[3]);
+								$object->editSave($form_split[3],$name);
 							}
 						}
 					} 
@@ -100,7 +116,7 @@
 						include(dirname(__FILE__).'/../../forms/'.$row['form'].'/dyn.php');
 						$className = 'lwCMS_dyn_'.$row['form'];
 						$object = new $className($utility);
-						$xml_data .= "<dyn>".urlencode($object->editData())."</dyn>";
+						$xml_data .= "<dyn>".$object->editData($row['form'])."</dyn>";
 						$xml_data .= (file_exists(dirname(__FILE__).'/../../forms/'.$row['form'].'/js/edit.js') ? "<dyn_javascript>".urlencode(file_get_contents(dirname(__FILE__).'/../../forms/'.$row['form'].'/js/edit.js'))."</dyn_javascript>" : "");
 					}
 					$xml_data .= "</pref>";
@@ -111,7 +127,7 @@
 						$split = explode("=",$field);
 						if($split[0] != "") {
 							$xml_data .= "<field name='".$split[0]."'>";
-							$xml_data .= "<name>".urldecode($split[1])."</name>";
+							$xml_data .= "<name>".$split[1]."</name>";
 							$xml_data .= "<type>".$split[3]."</type>";
 							$xml_data .= "<req>".$split[2]."</req>";
 							$xml_data .= "<display_name>".$split[4]."</display_name>";

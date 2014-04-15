@@ -10,9 +10,9 @@ function updateInlineformsData() {
 		$(this).find('.field-row').each(function(){
 			var name = $(this).find('.field-name').val();
 			if($(this).find('.field-type').val() == 'radio') 
-				data += name.replace(/\W/g, '')+"="+encodeURIComponent(name)+"="+($(this).find('.field-required').is(':checked') ? "1" : "0")+"="+$(this).find('.field-type').val()+"="+($(this).find('.field-display-name').is(':checked') ? "1" : "0")+"="+encodeURIComponent($(this).find('.radio-options').val())+";";
+				data += encodeURIComponent(name)+"="+encodeURIComponent(name)+"="+($(this).find('.field-required').is(':checked') ? "1" : "0")+"="+$(this).find('.field-type').val()+"="+($(this).find('.field-display-name').is(':checked') ? "1" : "0")+"="+encodeURIComponent($(this).find('.radio-options').val())+";";
 			else
-				data += name.replace(/\W/g, '')+"="+encodeURIComponent(name)+"="+($(this).find('.field-required').is(':checked') ? "1" : "0")+"="+$(this).find('.field-type').val()+"="+($(this).find('.field-display-name').is(':checked') ? "1" : "0")+";";
+				data += encodeURIComponent(name)+"="+encodeURIComponent(name)+"="+($(this).find('.field-required').is(':checked') ? "1" : "0")+"="+$(this).find('.field-type').val()+"="+($(this).find('.field-display-name').is(':checked') ? "1" : "0")+";";
 		});
 		data += "==";
 		// Preferences
@@ -24,12 +24,12 @@ function updateInlineformsData() {
 		data += ($(this).find('.form-captcha').is(':checked') ? "captcha=1;" : "");
 		data += ($(this).find('.form-email').val() != "" ? "email="+encodeURIComponent($(this).find('.form-email').val())+";" : "");
 		data += ($(this).find('.success-text .success-text-field').html() != "" ? "success_text="+encodeURIComponent($(this).find('.success-text .success-text-field').html())+";" : "");
-		$(this).children('.form-hidden-data').val(data);
 		// Dyn-Data
-		/*if($(this).find('.dyn-data').length) {
-			$data += "==";
-			$data += decodeURIComponent($(this).find('.dyn-data').val());
-		}*/
+		if($(this).find('.dyn-data').length) {
+			data += "==";
+			data += $(this).find('.dyn-data').val();
+		}
+		$(this).children('.form-hidden-data').val(data);
 	});
 }
 
@@ -96,7 +96,7 @@ function getInlineformsOverview() {
 			data += "<div class='form-fields'><table><tr><th>Name</th><th>Type</th><th>Preferences</th><th>Controls</th></tr>";
 			$(this).find('fields').find('field').each(function(){
 				data += "<tr class='field-row'>";
-				data += "<td><input type='text' class='field-name' value='"+$(this).find('name').text()+"' /></td>";
+				data += "<td><input type='text' class='field-name' value='"+decodeURIComponent($(this).find('name').text()).replace(/\+/g, ' ')+"' /></td>";
 				data += "<td><select class='field-type'>";
 				data += "<option value='text' "+($(this).find('type').text() == 'text' ? "selected='selected'" : "")+">Textfield</option>";
 				data += "<option value='password' "+($(this).find('type').text() == 'password' ? "selected='selected'" : "")+">Password</option>";
@@ -114,9 +114,9 @@ function getInlineformsOverview() {
 			data += "</table><button class='edit-form-add-field' type='button'>Add field</button></div>";
 			// Dyn data area
 			if(pref.find('dyn').length) {
-				var xml = decodeURIComponent($(this).find('dyn').text()).replace(/\+/g, ' ');
-				data += "<div class='dyndata-edit'><input type='hidden' class='dyn-data' value='"+xml+"' />";
-				data += "<script type='text/javascript'>"+decodeURIComponent($(this).find('dyn_javascript').text()).replace(/\+/g, ' ')+"</script></div>";
+				var xml = $(this).find('dyn').text();
+				data += "<div class='dyndata-edit' id='"+$(this).attr("name")+"-dyn-data'><input type='hidden' class='dyn-data' value='"+xml+"' />";
+				$.getScript("forms/"+$(this).attr("name")+"/js/edit.js");
 			}
 			// Close open tags
 			data += "<input class='form-hidden-data' type='hidden' value='NO_CHANGES' />";

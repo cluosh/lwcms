@@ -28,6 +28,9 @@
 	// Include utility
 	require_once(dirname(__FILE__).'/../../classes/base/utility.php');
 	
+	// Include dynamic forms base class
+	require_once(dirname(__FILE__).'/dyn_base.php');
+	
 	// -----------------------------------------------------------------
 	// Execution code
 	// -----------------------------------------------------------------
