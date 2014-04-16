@@ -21,7 +21,7 @@ $(document).on('click','a.inlineform',function(){
 		var dyndata = "";
 		if(forminfo.length > 1) {
 			formname = forminfo[0];
-			dyndata = forminfo[1];
+			dyndata = encodeURIComponent(forminfo[1]);
 		} else
 			formname = forminfo[0];
 		$.ajax({
@@ -35,6 +35,7 @@ $(document).on('click','a.inlineform',function(){
 			var form = "<form name='"+formname+"' method='POST' class='inlineform'><table>";
 			var pref = $(data).find('pref');
 			// Add text before row
+			form += (pref.find('dyn_before_left').text() != "" || pref.find('dyn_before_right').text() != "" ? "<tr class='before-text-row'><td>"+decodeURIComponent(pref.find('dyn_before_left').text()).replace(/\+/g, ' ')+"</td><td>"+decodeURIComponent(pref.find('dyn_before_right').text()).replace(/\+/g, ' ')+"</td></tr>" : "");
 			form += (pref.find('before_left').text() != "" || pref.find('before_right').text() != "" ? "<tr class='before-text-row'><td>"+decodeURIComponent(pref.find('before_left').text()).replace(/\+/g, ' ')+"</td><td>"+decodeURIComponent(pref.find('before_right').text()).replace(/\+/g, ' ')+"</td></tr>" : "");
 			$(data).find('fields').find('field').each(function(){
 				form += "<tr class='input-row'>";
@@ -81,6 +82,7 @@ $(document).on('click','a.inlineform',function(){
 				form += '<tr class="captcha_row"><td>* Image Verification</td><td><img id="captcha" src="thirdparty/securimage/securimage_show.php?'+Math.random()+'" alt="CAPTCHA Image" /><br /><input type="text" name="captcha_code" size="10" maxlength="6" />&nbsp;&nbsp;<a href="#" class="change-captcha-img">change Image</a><br /></td></tr>';
 			}
 			// Add text after row
+			form += (pref.find('dyn_after_left').text() != "" || pref.find('dyn_after_right').text() ? "<tr class='after-text-row'><td>"+decodeURIComponent(pref.find('dyn_after_left').text()).replace(/\+/g, ' ')+"</td><td>"+decodeURIComponent(pref.find('dyn_after_right').text()).replace(/\+/g, ' ')+"</td></tr>" : "");
 			form += (pref.find('after_left').text() != "" || pref.find('after_right').text() ? "<tr class='after-text-row'><td>"+decodeURIComponent(pref.find('after_left').text()).replace(/\+/g, ' ')+"</td><td>"+decodeURIComponent(pref.find('after_right').text()).replace(/\+/g, ' ')+"</td></tr>" : "");
 			form += "<tr><td></td><td><input type='submit' value='Submit' name='submit' /></td></tr></table><input type='hidden' name='formID' value='"+forminfo_unsplit+"' /></form>";
 			form += "<script type='text/javascript'>"+decodeURIComponent($(data).find('javascript').text()).replace(/\+/g, ' ')+"</script>";

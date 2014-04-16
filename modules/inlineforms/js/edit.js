@@ -8,7 +8,7 @@ function updateInlineformsData() {
 		var data = $(this).find('.form-name input').val()+"==";
 		// Fields
 		$(this).find('.field-row').each(function(){
-			var name = $(this).find('.field-name').val();
+			var name = $(this).find('.field-name').html();
 			if($(this).find('.field-type').val() == 'radio') 
 				data += encodeURIComponent(name)+"="+encodeURIComponent(name)+"="+($(this).find('.field-required').is(':checked') ? "1" : "0")+"="+$(this).find('.field-type').val()+"="+($(this).find('.field-display-name').is(':checked') ? "1" : "0")+"="+encodeURIComponent($(this).find('.radio-options').val())+";";
 			else
@@ -96,7 +96,7 @@ function getInlineformsOverview() {
 			data += "<div class='form-fields'><table><tr><th>Name</th><th>Type</th><th>Preferences</th><th>Controls</th></tr>";
 			$(this).find('fields').find('field').each(function(){
 				data += "<tr class='field-row'>";
-				data += "<td><input type='text' class='field-name' value='"+decodeURIComponent($(this).find('name').text()).replace(/\+/g, ' ')+"' /></td>";
+				data += "<td><div contenteditable class='field-name new-edit'>"+decodeURIComponent($(this).find('name').text()).replace(/\+/g, ' ')+"</div></td>";
 				data += "<td><select class='field-type'>";
 				data += "<option value='text' "+($(this).find('type').text() == 'text' ? "selected='selected'" : "")+">Textfield</option>";
 				data += "<option value='password' "+($(this).find('type').text() == 'password' ? "selected='selected'" : "")+">Password</option>";
@@ -115,7 +115,7 @@ function getInlineformsOverview() {
 			// Dyn data area
 			if(pref.find('dyn').length) {
 				var xml = $(this).find('dyn').text();
-				data += "<div class='dyndata-edit' id='"+$(this).attr("name")+"-dyn-data'><input type='hidden' class='dyn-data' value='"+xml+"' />";
+				data += "<div class='dyndata-edit' id='"+$(this).attr("name")+"-dyn-data'><input type='hidden' class='dyn-data' value='"+xml+"' /></div>";
 				$.getScript("forms/"+$(this).attr("name")+"/js/edit.js");
 			}
 			// Close open tags
@@ -131,7 +131,7 @@ function getInlineformsOverview() {
 					coreStyles_italic: { element: 'i' },
 					enterMode:3
 				});
-				$(this).removeClass('.new-edit');
+				$(this).removeClass('new-edit');
 			});
 		});
 	});
@@ -152,6 +152,7 @@ $(document).on('click','.form-info-hide,.form-info-expand,.form-delete',function
 	} else if($(this).hasClass('form-info-expand')) {
 		$('.form-preferences').hide();
 		$('.form-fields').hide();
+		$('.dyndata-edit').hide();
 		$('.form-info-hide').addClass('form-info-expand');
 		$('.form-info-hide').removeClass('form-info-hide');
 		info.siblings('div').show();
@@ -192,13 +193,13 @@ $(document).on('click','#backend-inlineforms-button,#edit-button-add_form,.edit-
 				coreStyles_italic: { element: 'i' },
 				enterMode:3
 			});
-			$(this).removeClass('.new-edit');
+			$(this).removeClass('new-edit');
 		});
 		updateInlineformsData();
 		return true;
 	} else if($(this).hasClass('edit-form-add-field')) {
 		data += "<tr class='field-row'>";
-		data += "<td><input type='text' class='field-name' value='NEW_FIELD' /></td>";
+		data += "<td><div contenteditable class='field-name new-edit'>NEW_FIELD</div></td>";
 		data += "<td><select class='field-type'>";
 		data += "<option value='text' selected='selected'>Textfield</option>";
 		data += "<option value='password'>Password</option>";
@@ -213,6 +214,17 @@ $(document).on('click','#backend-inlineforms-button,#edit-button-add_form,.edit-
 		data += "<td><a href='#' class='form-field-up'>Up</a>&nbsp;|&nbsp;<a href='#' class='form-field-down'>Down</a>&nbsp;|&nbsp;<a href='#' class='form-field-delete'>Delete</a></td>";
 		data += "</tr>";
 		$(this).siblings('table:first').append(data);
+		$('.new-edit').each(function(){
+			$(this).ckeditor({
+				filebrowserBrowseUrl : 'thirdparty/pdw_file_browser/index.php?editor=ckeditor',
+				filebrowserImageBrowseUrl : 'thirdparty/pdw_file_browser/index.php?editor=ckeditor&filter=image',
+				filebrowserFlashBrowseUrl : 'thirdparty/pdw_file_browser/index.php?editor=ckeditor&filter=flash',
+				coreStyles_bold: { element: 'b' },
+				coreStyles_italic: { element: 'i' },
+				enterMode:3
+			});
+			$(this).removeClass('new-edit');
+		});
 		updateInlineformsData();
 		return true;
 	} else if($(this).hasClass('form-field-up')) {

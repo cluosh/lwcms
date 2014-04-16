@@ -11,7 +11,7 @@
 		public function __construct() {
 			if(func_num_args() == 2) {
 				$this->utility = func_get_arg(0);
-				$this->dyndata = func_get_arg(1);
+				$this->dyndata = urldecode(func_get_arg(1));
 			} else { 
 				$this->utility = func_get_arg(0);
 				$this->dyndata = "";
@@ -19,13 +19,16 @@
 				
 		}
 		// Empty functions
-		public function javascript_check() {
+		public function javascript_check($field) {
 			return "";
 		}
-		public function php_check() {
+		public function php_check($field) {
 			return "";
 		}
 		public function before_after() {
+			return "";
+		}
+		public function content($field) {
 			return "";
 		}
 		
@@ -41,6 +44,15 @@
 		
 		public function editSave($data,$name) {
 			$this->utility->query("REPLACE INTO `".$this->utility->prefix()."mod_inlineforms_info` VALUES ('".$name."','".$this->utility->escape($data)."');");
+		}
+		
+		// Filter id_string
+		protected function filterID($filterstring) {
+			$string = urldecode($filterstring);
+			$string = strip_tags($string);
+			$string = preg_replace("/[^A-Za-z0-9\-_]/", '', $string);
+			$string = strtolower($string);
+			return $string;
 		}
 	}
 ?>

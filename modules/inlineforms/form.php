@@ -56,7 +56,7 @@
 				}
 			}
 			if(file_exists(dirname(__FILE__).'/../../forms/'.$name.'/dyn.php')) {
-				include(dirname(__FILE__).'/../../forms/'.$name.'/dyn.php');
+				if(!class_exists('lwCMS_dyn_'.$name)) if(!class_exists('lwCMS_dyn_'.$name)) include(dirname(__FILE__).'/../../forms/'.$name.'/dyn.php');
 				$className = 'lwCMS_dyn_'.$name;
 				$object = new $className($utility,$_GET['dyn']);
 				$xml_data .= $object->before_after();
@@ -82,6 +82,14 @@
 						foreach($array as $button) 
 							$xml_data .= "<button>".$button."</button>";
 						$xml_data .= "</radio_options>";
+					}
+					if($split[3] == 'dynamic') {
+						if(file_exists(dirname(__FILE__).'/../../forms/'.$name.'/dyn.php')) {
+							if(!class_exists('lwCMS_dyn_'.$name)) include(dirname(__FILE__).'/../../forms/'.$name.'/dyn.php');
+							$className = 'lwCMS_dyn_'.$name;
+							$object = new $className($utility,$_GET['dyn']);
+							$xml_data .= "<content>".$object->content($split[0])."</content>";
+						}
 					}
 					$xml_data .= "</field>";
 					if(($split[3] == 'text' || $split[3] == 'email' || $split[3] == 'password' || $split[3] == 'textarea') && $split[2] == 1) {
@@ -112,7 +120,7 @@
 							return false;
 						}";
 					} elseif($split[3] == 'dynamic' && $split[2] == 1) {
-						include(dirname(__FILE__).'/../../forms/'.$name.'/dyn.php');
+						if(!class_exists('lwCMS_dyn_'.$name)) include(dirname(__FILE__).'/../../forms/'.$name.'/dyn.php');
 						$className = 'lwCMS_dyn_'.$name;
 						$object = new $className($utility,$_GET['dyn']);
 						$java .= $object->javascript_check($split[0]);
@@ -222,7 +230,7 @@
 						exit;
 					}
 					if($split[3] == 'dynamic') {
-						include(dirname(__FILE__).'/../../forms/'.$name.'/dyn.php');
+						if(!class_exists('lwCMS_dyn_'.$name)) include(dirname(__FILE__).'/../../forms/'.$name.'/dyn.php');
 						$className = 'lwCMS_dyn_'.$name;
 						$object = new $className($utility,$_GET['dyn']);
 						$object->php_check($split[0]);
@@ -283,6 +291,13 @@
 			$_SESSION['captcha'] = true;
 		}
 
+		exit;
+	} elseif(isset($_GET['id_string'])) {
+		$string = urldecode($_GET['id_string']);
+		$string = strip_tags($string);
+		$string = preg_replace("/[^A-Za-z0-9\-_]/", '', $string);
+		$string = strtolower($string);
+		echo $string;
 		exit;
 	}
 ?>

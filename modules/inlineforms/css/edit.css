@@ -12,6 +12,14 @@
 	border-top:1px solid grey;
 }
 
+.field-row .field-name {
+	max-width:150px;
+	max-height:50px;
+	overflow:auto;
+	border:1px dashed green;
+	padding:2px;
+}
+
 .form-preferences {
 	border-top: 1px solid black;
 	display:none;
