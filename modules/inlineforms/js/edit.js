@@ -68,6 +68,7 @@ function getInlineformsOverview() {
 	
 	// Set content area value
 	curContentArea = 'none';
+	curContentType = 'inlineforms';
 	
 	// Get information from the database
 	$.ajax({

@@ -225,7 +225,7 @@
 			foreach($fields as $field) {
 				$split = explode("=",$field);
 				if($split[0] != "") {
-					if((!isset($_POST['form_'.$split[0]]) || trim($_POST['form_'.$split[0]]) == "") && $split[2] == "1") {
+					if((!isset($_POST['form_'.$split[0]]) || trim($_POST['form_'.$split[0]]) == "") && $split[2] == "1" && $split[3] != 'dynamic') {
 						echo "<data><error>".$split[1]." is a required field.</error></data>";
 						exit;
 					}
@@ -233,7 +233,7 @@
 						if(!class_exists('lwCMS_dyn_'.$name)) include(dirname(__FILE__).'/../../forms/'.$name.'/dyn.php');
 						$className = 'lwCMS_dyn_'.$name;
 						$object = new $className($utility,$_GET['dyn']);
-						$object->php_check($split[0]);
+						$data .= $object->php_check($split[0]);
 					}
 					if(isset($_POST['form_'.$split[0]])) 
 						$data .= $split[1].": ".$_POST['form_'.$split[0]]."\n";
