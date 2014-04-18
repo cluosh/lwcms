@@ -23,7 +23,8 @@ CREATE TABLE `lwCMS_mod_inlineforms_data` (
 DROP TABLE IF EXISTS `lwCMS_mod_inlineforms_info`;
 CREATE TABLE `lwCMS_mod_inlineforms_info` (
   `form` varchar(30) NOT NULL,
-  `info` text NOT NULL
+  `info` text NOT NULL,
+  PRIMARY KEY (`form`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
