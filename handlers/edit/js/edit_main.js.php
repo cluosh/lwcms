@@ -131,7 +131,6 @@ $(function(){
 		return false;
 	});
 	$('#edit-content-selection').bind('change',function(){
-		alert(curContentArea);
 		$('#'+curContentArea).removeClass('area_'+curContentType);
 		$('#'+curContentArea).addClass('area_'+$('#edit-content-selection option:selected').val());
 		$('#editing-content').html("");

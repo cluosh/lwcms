@@ -35,11 +35,11 @@ $(document).on('click','a.inlineform',function(){
 			var form = "<form name='"+formname+"' method='POST' class='inlineform'><table>";
 			var pref = $(data).find('pref');
 			// Add text before row
-			form += (pref.find('dyn_before_left').text() != "" || pref.find('dyn_before_right').text() != "" ? "<tr class='before-text-row'><td>"+decodeURIComponent(pref.find('dyn_before_left').text()).replace(/\+/g, ' ')+"</td><td>"+decodeURIComponent(pref.find('dyn_before_right').text()).replace(/\+/g, ' ')+"</td></tr>" : "");
-			form += (pref.find('before_left').text() != "" || pref.find('before_right').text() != "" ? "<tr class='before-text-row'><td>"+decodeURIComponent(pref.find('before_left').text()).replace(/\+/g, ' ')+"</td><td>"+decodeURIComponent(pref.find('before_right').text()).replace(/\+/g, ' ')+"</td></tr>" : "");
+			form += (pref.find('dyn_before_left').text() != "" || pref.find('dyn_before_right').text() != "" ? "<tr class='before-text-row'><td class='left-column'>"+decodeURIComponent(pref.find('dyn_before_left').text()).replace(/\+/g, ' ')+"</td><td class='right-column'>"+decodeURIComponent(pref.find('dyn_before_right').text()).replace(/\+/g, ' ')+"</td></tr>" : "");
+			form += (pref.find('before_left').text() != "" || pref.find('before_right').text() != "" ? "<tr class='before-text-row'><td class='left-column'>"+decodeURIComponent(pref.find('before_left').text()).replace(/\+/g, ' ')+"</td><td class='right-column'>"+decodeURIComponent(pref.find('before_right').text()).replace(/\+/g, ' ')+"</td></tr>" : "");
 			$(data).find('fields').find('field').each(function(){
 				form += "<tr class='input-row'>";
-				form += "<td class='descriptor'>"+($(this).find('display_name').text() == "1" ? ($(this).find('req').text() == "1" ? "* " : "")+$(this).find('name').text() : "")+"</td>";
+				form += "<td class='descriptor'>"+($(this).find('display_name').text() == "1" ? ($(this).find('req').text() == "1" ? "* " : "")+decodeURIComponent($(this).find('name').text()).replace(/\+/g, ' ') : "")+"</td>";
 				switch($(this).find('type').text()) {
 					case 'text':
 						form += "<td class='input-field'><input type='text' name='form_"+$(this).attr('name')+"' /></td>";
@@ -79,11 +79,11 @@ $(document).on('click','a.inlineform',function(){
 			});
 			// Add captcha if specified
 			if(pref.find('captcha').text() == "1") {
-				form += '<tr class="captcha_row"><td>* Image Verification</td><td><img id="captcha" src="thirdparty/securimage/securimage_show.php?'+Math.random()+'" alt="CAPTCHA Image" /><br /><input type="text" name="captcha_code" size="10" maxlength="6" />&nbsp;&nbsp;<a href="#" class="change-captcha-img">change Image</a><br /></td></tr>';
+				form += '<tr class="captcha_row"><td class="left-column">* Image Verification</td><td><img id="captcha" src="thirdparty/securimage/securimage_show.php?'+Math.random()+'" alt="CAPTCHA Image" /><br /><input type="text" name="captcha_code" size="10" maxlength="6" />&nbsp;&nbsp;<a href="#" class="change-captcha-img">change Image</a><br /></td></tr>';
 			}
 			// Add text after row
-			form += (pref.find('dyn_after_left').text() != "" || pref.find('dyn_after_right').text() ? "<tr class='after-text-row'><td>"+decodeURIComponent(pref.find('dyn_after_left').text()).replace(/\+/g, ' ')+"</td><td>"+decodeURIComponent(pref.find('dyn_after_right').text()).replace(/\+/g, ' ')+"</td></tr>" : "");
-			form += (pref.find('after_left').text() != "" || pref.find('after_right').text() ? "<tr class='after-text-row'><td>"+decodeURIComponent(pref.find('after_left').text()).replace(/\+/g, ' ')+"</td><td>"+decodeURIComponent(pref.find('after_right').text()).replace(/\+/g, ' ')+"</td></tr>" : "");
+			form += (pref.find('dyn_after_left').text() != "" || pref.find('dyn_after_right').text() ? "<tr class='after-text-row'><td class='left-column'>"+decodeURIComponent(pref.find('dyn_after_left').text()).replace(/\+/g, ' ')+"</td><td class='right-column'>"+decodeURIComponent(pref.find('dyn_after_right').text()).replace(/\+/g, ' ')+"</td></tr>" : "");
+			form += (pref.find('after_left').text() != "" || pref.find('after_right').text() ? "<tr class='after-text-row'><td class='left-column'>"+decodeURIComponent(pref.find('after_left').text()).replace(/\+/g, ' ')+"</td><td class='right-column'>"+decodeURIComponent(pref.find('after_right').text()).replace(/\+/g, ' ')+"</td></tr>" : "");
 			form += "<tr><td></td><td><input type='submit' value='Submit' name='submit' /></td></tr></table><input type='hidden' name='formID' value='"+forminfo_unsplit+"' /></form>";
 			form += "<script type='text/javascript'>"+decodeURIComponent($(data).find('javascript').text()).replace(/\+/g, ' ')+"</script>";
 			$('div.inlineform').append(form);
@@ -148,6 +148,8 @@ $(document).on('submit','form.inlineform',function(){
 		data:formdata,
 		async:false
 	}).done(function(data){
+		// Delete old text
+		$('.form-text').remove();
 		if($(data).find('success').length) {
 			$('<div class="form-text">'+decodeURIComponent($(data).find('success').text()).replace(/\+/g, ' ')+'</div>').insertBefore('form.inlineform');
 			$('form.inlineform').hide();

@@ -71,10 +71,12 @@
 				$split = explode("=",$field);
 				if($split[0] != "") {
 					$xml_data .= "<field name='".$split[0]."'>";
-					$xml_data .= "<name>".urldecode($split[1])."</name>";
+					$xml_data .= "<name>".urlencode(preg_replace("/<\/?div[^>]*\>/i", "", urldecode($split[1])))."</name>";
 					$xml_data .= "<type>".$split[3]."</type>";
 					$xml_data .= "<req>".$split[2]."</req>";
 					$xml_data .= "<display_name>".$split[4]."</display_name>";
+					// Split tags from name
+					$split[1] = strip_tags(urldecode($split[1]));
 					if(isset($split[5])) {
 						$xml_data .= "<radio_options>";
 						$array = urldecode($split[5]);
@@ -123,7 +125,7 @@
 						if(!class_exists('lwCMS_dyn_'.$name)) include(dirname(__FILE__).'/../../forms/'.$name.'/dyn.php');
 						$className = 'lwCMS_dyn_'.$name;
 						$object = new $className($utility,$_GET['dyn']);
-						$java .= $object->javascript_check($split[0]);
+						$java .= $object->javascript_check($split);
 					} elseif($split[3] == 'payment') {
 						if($split[2] == 1) {
 							$java .= "
@@ -207,8 +209,8 @@
 						case 'db':
 							$save_to_db = $split[1];
 							break;
-						case 'emails':
-							$emails = explode(";",urldecode($split[2]));
+						case 'email':
+							$emails = explode(";",urldecode($split[1]));
 							break;
 						case 'captcha':
 							$captcha = $split[1];
@@ -224,6 +226,8 @@
 			$data = "";
 			foreach($fields as $field) {
 				$split = explode("=",$field);
+				// Strip tags from name
+				$split[1] = strip_tags(urldecode($split[1]));
 				if($split[0] != "") {
 					if((!isset($_POST['form_'.$split[0]]) || trim($_POST['form_'.$split[0]]) == "") && $split[2] == "1" && $split[3] != 'dynamic') {
 						echo "<data><error>".$split[1]." is a required field.</error></data>";
@@ -232,10 +236,9 @@
 					if($split[3] == 'dynamic') {
 						if(!class_exists('lwCMS_dyn_'.$name)) include(dirname(__FILE__).'/../../forms/'.$name.'/dyn.php');
 						$className = 'lwCMS_dyn_'.$name;
-						$object = new $className($utility,$_GET['dyn']);
-						$data .= $object->php_check($split[0]);
-					}
-					if(isset($_POST['form_'.$split[0]])) 
+						$object = new $className($utility,(isset($_POST['dyn']) ? $_POST['dyn'] : ""));
+						$data .= $object->php_check($split);
+					} elseif(isset($_POST['form_'.$split[0]]) && !($split[3] == 'radio' && $_POST['form_'.$split[0]] == 'on')) 
 						$data .= $split[1].": ".$_POST['form_'.$split[0]]."\n";
 					if($split[3] == 'payment' && $split[2] == "1" && $_POST['form_'.$split[0]] != 'bank' && (!isset($_POST['form_'.$split[0].'_card_no']) || trim($_POST['form_'.$split[0].'_card_no']) == "" || !isset($_POST['form_'.$split[0].'_card_holder']) || trim($_POST['form_'.$split[0].'_card_holder']) == "" || !isset($_POST['form_'.$split[0].'_expire_date']) || trim($_POST['form_'.$split[0].'_expire_date']) == "")) {
 						echo "<data><error>Credit card informations are required fields.</error></data>";

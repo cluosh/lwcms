@@ -53,6 +53,7 @@
 				if($class->contentArea()) $this->modules[count($this->modules)] = $module_name."=".urlencode($class->displayedName());
 				if($class->alwaysLoad()) $this->load_always[count($this->load_always)] = $module_name;
 				$this->edit_headers .= $class->editingHeaderInfo()."\n";
+				$this->edit_headers .= $class->headerInfo()."\n";
 			}
 			
 			// Create files

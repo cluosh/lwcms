@@ -27,6 +27,9 @@ function updateInlineformsData() {
 		// Dyn-Data
 		if($(this).find('.dyn-data').length) {
 			data += "==";
+			var func = $(this).find('.dyndata-edit').attr("id").split("-dyn-data");
+			fn = window[func[0]+"_updateData"];
+			fn();
 			data += $(this).find('.dyn-data').val();
 		}
 		$(this).children('.form-hidden-data').val(data);
@@ -116,7 +119,7 @@ function getInlineformsOverview() {
 			// Dyn data area
 			if(pref.find('dyn').length) {
 				var xml = $(this).find('dyn').text();
-				data += "<div class='dyndata-edit' id='"+$(this).attr("name")+"-dyn-data'><input type='hidden' class='dyn-data' value='"+xml+"' /></div>";
+				data += "<div class='dyndata-edit' id='"+$(this).attr("name")+"-dyn-data'><input type='hidden' class='dyn-data' value=\""+xml+"\" /></div>";
 				$.getScript("forms/"+$(this).attr("name")+"/js/edit.js");
 			}
 			// Close open tags

@@ -152,8 +152,7 @@
 			echo "<link rel='shortcut icon' type='image/x-icon' href='templates/".$this->pageinfo['theme_name']."/favicon.ico'/>\n\t\t";
 			echo "<script src='//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js'></script>\n\t\t";
 			// Add module scripts
-			echo $this->modman->headers();
-			echo ($this->checkLoginState() ? $this->modman->edit_headers() : "");
+			echo ($this->checkLoginState() ? $this->modman->edit_headers() : $this->modman->headers());
 			// Add stylesheets
 			echo $this->combineStylesheets();
 		}

@@ -19,7 +19,10 @@ function onEditPopupOpen_slideshowcontent(object) {
 	}).done(function(data){
 		// Process data
 		var chunks = data.split(";");
-		if(chunks.length < 3) return;
+		if(chunks.length < 3) {
+			chunks = "600;300;2500;";
+			chunks = chunks.split(";");
+		}
 		var width = chunks[0];
 		var height = chunks[1];
 		var display_time = chunks[2];
