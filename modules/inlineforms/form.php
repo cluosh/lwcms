@@ -34,8 +34,6 @@
 	// -----------------------------------------------------------------
 	// Execution code
 	// -----------------------------------------------------------------
-	if(session_id() == '') session_start();
-	if(!isset($_SESSION['editing'])) { echo "FAIL"; exit; }
 	if(isset($_GET['form']) && isset($_GET['dyn'])) {
 		$utility = new lwCMS_Utility();
 		$result = $utility->query("SELECT * FROM `".$utility->prefix()."mod_inlineforms` WHERE `form`='".$utility->escape($_GET['form'])."';");
@@ -271,7 +269,7 @@
 				$utility->query("INSERT INTO `".$utility->prefix()."mod_inlineforms_data` VALUES ('".$name."','".$data."','".date(DATE_RFC822)."');");
 			// Send emails if specified
 			foreach($emails as $email)
-				mail($email, "New ".$name." submit", $name." submit:\n".$data, "From: ".$email);
+				mail($email, "New ".$name." submit", $name." submit:\n".$data, "From: office@evolution-fea.com");
 			
 			// Return success message
 			echo "<data><success>".$success_text."</success></data>";

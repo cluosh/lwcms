@@ -48,7 +48,7 @@ $(document).on('click','a.inlineform',function(){
 						form += "<td class='input-field'><input type='password' name='form_"+$(this).attr('name')+"' /></td>";
 						break;
 					case 'textarea':
-						form += "<td class='input-field'><textarea name='form_"+$(this).attr('name')+"'></textarea></td>";
+						form += "<td class='input-field' style='vertical-align:top;'><textarea name='form_"+$(this).attr('name')+"'></textarea></td>";
 						break;
 					case 'email':
 						form += "<td class='input-field'><input type='text' name='form_"+$(this).attr('name')+"' /></td>";

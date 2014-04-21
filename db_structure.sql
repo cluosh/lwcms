@@ -38,6 +38,8 @@ CREATE TABLE `lwCMS_pages` (
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+INSERT INTO `lwCMS_pages` (`ID`, `pageID_string`, `page_title`, `theme_name`, `template_name`) VALUES (1,	'home',	'',	'default',	'default');
+
 
 DROP TABLE IF EXISTS `lwCMS_pages_content`;
 CREATE TABLE `lwCMS_pages_content` (
