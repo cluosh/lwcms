@@ -2,6 +2,11 @@
 	/*
 	 * install.php: Set up tool for lwCMS
 	 */
+	$error_message = "";
+	if(isset($_POST['submit'])) {
+		if(!isset($_POST['pass']) || !isset($_POST['pass']) || !isset($_POST['host']) || !isset($_POST['db'])
+			$error_message = "Enter required information";
+	}
 ?>
 <!DOCTYPE HTML>
 <html>
