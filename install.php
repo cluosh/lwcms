@@ -4,8 +4,16 @@
 	 */
 	$error_message = "";
 	if(isset($_POST['submit'])) {
-		if(!isset($_POST['pass']) || !isset($_POST['pass']) || !isset($_POST['host']) || !isset($_POST['db'])
+		if(!isset($_POST['pass']) || !isset($_POST['user']) || !isset($_POST['host']) || !isset($_POST['db']) {
 			$error_message = "Enter required information";
+			return;
+		}
+		// Connect to DB
+		db = new mysqli($_POST['host'],$_POST['user'],$_POST['pass'],$_POST['db']);
+		if ($db->connect_errno) {
+			$error_message "Failed to connect to Database: (" . $db->connect_errno . ") " . $db->connect_error;
+			return;
+		}
 	}
 ?>
 <!DOCTYPE HTML>
