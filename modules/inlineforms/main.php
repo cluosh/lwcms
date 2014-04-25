@@ -44,7 +44,8 @@
 		
 		// Define header info
 		public function headerInfo() {
-			return "<script type='text/javascript' src='modules/inlineforms/js/forms.js'></script>";
+			return "<script type='text/javascript' src='modules/inlineforms/js/forms.js'></script>
+			<link rel='stylesheet' type='text/css' href='modules/inlineforms/css/forms.css' />";
 		}
 		
 		// Editing header

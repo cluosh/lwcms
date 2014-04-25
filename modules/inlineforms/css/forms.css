@@ -1,0 +1,23 @@
+/*
+ * forms.css: Style definitions for inlineforms
+ */
+
+div.inlineform {
+	border:1px solid black;
+	padding:5px
+}
+
+.inlineform-hide {
+	text-decoration:none;
+	width:12px;
+	height:0px;
+	padding-top:12px;
+	background-position:0 0;
+	overflow:hidden;	
+	float:right;
+	background-image:url('../images/hide_icon.png');
+}
+
+.inlineform-hide:hover {
+	background-position:0 -12px;
+}

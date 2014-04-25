@@ -3,13 +3,12 @@
  */
 $(document).on('click','a.inlineform',function(){
 	if($(this).siblings('div.inlineform:first').length) {
-		var sibling = $(this).siblings('div.inlineform:first');
-		sibling.remove();
+		$(this).siblings('div.inlineform:first').remove();
 	} else {
 		if($('div.inlineform').length) {
 			$('div.inlineform').each(function(){ $(this).remove(); });
 		}
-		$('<div class="inlineform" style="border:1px solid black;padding:5px"></div>').insertAfter($(this));
+		$('<div class="inlineform"><a href="#" class="inlineform-hide"></a></div>').insertAfter($(this));
 		var forminfo_unsplit = $(this).attr("href")
 		var forminfo = forminfo_unsplit.split("?");
 		var formname = "";
@@ -163,3 +162,9 @@ $(document).on('click','.change-captcha-img',function(){
 	$('#captcha').attr('src','thirdparty/securimage/securimage_show.php?' + Math.random());
 	return false;
 });
+
+$(document).on('click','.inlineform-hide',function(){
+	$(this).parents('div.inlineform').remove();
+	return false;
+});
+	
