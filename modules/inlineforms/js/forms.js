@@ -9,7 +9,7 @@ $(document).on('click','a.inlineform',function(){
 		if($('div.inlineform').length) {
 			$('div.inlineform').each(function(){ $(this).remove(); });
 		}
-		('<div class="inlineform"></div>').insertAfter($(this));
+		$('<div class="inlineform"></div>').insertAfter($(this));
 		var forminfo_unsplit = $(this).attr("href")
 		var forminfo = forminfo_unsplit.split("?");
 		var formname = "";
@@ -84,7 +84,7 @@ $(document).on('click','a.inlineform',function(){
 			$('div.inlineform').append(form);
 		});
 		$('html, body').animate({
-			scrollTop: $('div.inlineform').offset().top - $('div.inlineform').height()
+			scrollTop: $('div.inlineform').offset().top
 		},500);
 		return false;
 	}
