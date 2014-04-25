@@ -2,19 +2,14 @@
  * forms.js: Load forms and display
  */
 $(document).on('click','a.inlineform',function(){
-	if($(this).parents('div.inlineform:first').length) {
-		var parent = $(this).parents('div.inlineform:first');
-		$(this).insertBefore(parent);
-		parent.remove();
+	if($(this).siblings('div.inlineform:first').length) {
+		var sibling = $(this).siblings('div.inlineform:first');
+		sibling.remove();
 	} else {
 		if($('div.inlineform').length) {
-			$('div.inlineform').each(function(){
-				var child = $(this).children('a.inlineform');
-				child.insertBefore($(this));
-				$(this).remove();
-			});
+			$('div.inlineform').each(function(){ $(this).remove(); });
 		}
-		$(this).wrap('<div class="inlineform"></div>');
+		('<div class="inlineform"></div>').insertAfter($(this));
 		var forminfo_unsplit = $(this).attr("href")
 		var forminfo = forminfo_unsplit.split("?");
 		var formname = "";
@@ -88,6 +83,9 @@ $(document).on('click','a.inlineform',function(){
 			form += "<script type='text/javascript'>"+decodeURIComponent($(data).find('javascript').text()).replace(/\+/g, ' ')+"</script>";
 			$('div.inlineform').append(form);
 		});
+		$('html, body').animate({
+			scrollTop: $('div.inlineform').offset().top - $('div.inlineform').height()
+		},500);
 		return false;
 	}
 	return false;
