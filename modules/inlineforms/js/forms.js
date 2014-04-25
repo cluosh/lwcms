@@ -9,7 +9,7 @@ $(document).on('click','a.inlineform',function(){
 		if($('div.inlineform').length) {
 			$('div.inlineform').each(function(){ $(this).remove(); });
 		}
-		$('<div class="inlineform"></div>').insertAfter($(this));
+		$('<div class="inlineform" style="border:1px solid black;padding:5px"></div>').insertAfter($(this));
 		var forminfo_unsplit = $(this).attr("href")
 		var forminfo = forminfo_unsplit.split("?");
 		var formname = "";
