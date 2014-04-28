@@ -269,7 +269,7 @@
 				$utility->query("INSERT INTO `".$utility->prefix()."mod_inlineforms_data` VALUES ('".$name."','".$data."','".date(DATE_RFC822)."');");
 			// Send emails if specified
 			foreach($emails as $email)
-				mail($email, "New ".$name." submit", $name." submit:\n".$data, "From: office@evolution-fea.com");
+				mail($email, "New ".$name." submit", $name." submit:\n".$data, "From: ".$email);
 			
 			// Return success message
 			echo "<data><success>".$success_text."</success></data>";
