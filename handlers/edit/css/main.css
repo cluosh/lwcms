@@ -3,6 +3,11 @@
  */
 
 /* Wrapper and toolbar definitions */
+html, body {
+	margin:0;
+	padding:0;
+}
+
 #backend-wrapper {
 	position:relative;
 }
