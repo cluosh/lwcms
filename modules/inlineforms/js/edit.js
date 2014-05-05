@@ -24,6 +24,7 @@ function updateInlineformsData() {
 		data += ($(this).find('.form-captcha').is(':checked') ? "captcha=1;" : "");
 		data += ($(this).find('.form-email').val() != "" ? "email="+encodeURIComponent($(this).find('.form-email').val())+";" : "");
 		data += ($(this).find('.success-text .success-text-field').html() != "" ? "success_text="+encodeURIComponent($(this).find('.success-text .success-text-field').html())+";" : "");
+		data += ($(this).find('.confirmation-text .confirmation-text-field').html() != "" ? "confirmation_text="+encodeURIComponent($(this).find('.confirmation-text .confirmation-text-field').html())+";" : "");
 		// Dyn-Data
 		if($(this).find('.dyn-data').length) {
 			data += "==";
@@ -91,10 +92,11 @@ function getInlineformsOverview() {
 			data += "<div class='form-preferences'><table>";
 			data += "<tr><td>Use CAPTCHA:&nbsp;<input type='checkbox' class='form-captcha' "+(pref.find('captcha').text() == '1' ? "checked='checked'" : "")+"/></td><td></td><td></td></tr>";
 			data += "<tr><td>Save data to DB:&nbsp;<input type='checkbox' class='form-db' "+(pref.find('db').text() == '1' ? "checked='checked'" : "")+"/></td><td colspan='2'>Send data to e-mail (sperarate addresses with ';'):&nbsp;<input type='input' class='form-email' value='"+decodeURIComponent(pref.find('email').text()).replace(/\+/g, ' ')+"'/></td></tr>";
-			data += "<tr><td><div style='float:left;'>Text before form</div>&nbsp;<a class='form-text-expand before' href=''>#</a></td><td><div style='float:left;'>Text after form</div>&nbsp;<a class='form-text-expand after' href=''>#</a></td><td><div style='float:left;'>Success text</div>&nbsp;<a class='form-text-expand success' href=''>#</a></td>";
+			data += "<tr><td><div style='float:left;'>Text before form</div>&nbsp;<a class='form-text-expand before' href=''>#</a></td><td><div style='float:left;'>Text after form</div>&nbsp;<a class='form-text-expand after' href=''>#</a></td><td><div style='float:left;'>Success text</div>&nbsp;<a class='form-text-expand success' href=''>#</a></td><td><div style='float:left;'>Confirmation text</div>&nbsp;<a class='form-text-expand confirmation' href=''>#</a></td>";
 			data += "<tr class='before-text'><td><div style='float:left;'>Left column</div><br /><div contenteditable='true' class='left_column new-edit'>"+decodeURIComponent(pref.find('before_left').text()).replace(/\+/g, ' ')+"</div></td><td colspan='2'><div style='float:left;'>Right column</div><br /><div contenteditable='true' class='right_column new-edit'>"+decodeURIComponent(pref.find('before_right').text()).replace(/\+/g, ' ')+"</div></td></tr>";
 			data += "<tr class='after-text'><td><div style='float:left;'>Left column</div><br /><div contenteditable='true' class='left_column new-edit'>"+decodeURIComponent(pref.find('after_left').text()).replace(/\+/g, ' ')+"</div></td><td colspan='2'><div style='float:left;'>Right column</div><br /><div contenteditable='true' class='right_column new-edit'>"+decodeURIComponent(pref.find('after_right').text()).replace(/\+/g, ' ')+"</div></td></tr>";
 			data += "<tr class='success-text'><td colspan='3'><div style='float:left;'>Success text</div><br /><div contenteditable='true' class='success-text-field new-edit'>"+decodeURIComponent(pref.find('success_text').text()).replace(/\+/g, ' ')+"</div></td></tr>";
+			data += "<tr class='confirmation-text'><td colspan='3'><div style='float:left;'>Confirmation text</div><br /><div contenteditable='true' class='confirmation-text-field new-edit'>"+decodeURIComponent(pref.find('confirmation_text').text()).replace(/\+/g, ' ')+"</div></td></tr>";
 			data += "</table></div>";
 			// Get fields
 			data += "<div class='form-fields'><table><tr><th>Name</th><th>Type</th><th>Preferences</th><th>Controls</th></tr>";
@@ -111,7 +113,7 @@ function getInlineformsOverview() {
 				data += "<option value='payment' "+($(this).find('type').text() == 'payment' ? "selected='selected'" : "")+">Bank-Data / Payment</option>";
 				data += "<option value='dynamic' "+($(this).find('type').text() == 'dynamic' ? "selected='selected'" : "")+">Dynamic</option>";
 				data += "</select></td>";
-				data += "<td><input type='checkbox' class='field-required' "+($(this).find('req').text() == '1' ? "checked='checked'" : "")+"/>&nbsp;Required field<br /><input type='checkbox' class='field-display-name' "+($(this).find('display_name').text() == '1' ? "checked='checked'" : "")+"/>&nbsp;Display name"+($(this).find('type').text() == 'radio' ? "<br />Options (separate with ';;'):&nbsp;<input type='text' class='radio-options' value='"+$(this).find('radio_options').text()+"'/>" : "")+"</td>";
+				data += "<td><input type='checkbox' class='field-required' "+($(this).find('req').text() == '1' ? "checked='checked'" : "")+"/>&nbsp;Required field<br /><input type='checkbox' class='field-display-name' "+($(this).find('display_name').text() == '1' ? "checked='checked'" : "")+"/>&nbsp;Display name"+($(this).find('type').text() == 'radio' ? "<br />Options (separate with ';;'):&nbsp;<input type='text' class='radio-options' value='"+$(this).find('radio_options').text()+"'/>" : "")+($(this).find('type').text() == 'email' ? "<br /><input type='checkbox' class='confirmation-email'/>&nbsp;Send confirmation E-Mail" : "")+"</td>";
 				data += "<td><a href='#' class='form-field-up'>Up</a>&nbsp;|&nbsp;<a href='#' class='form-field-down'>Down</a>&nbsp;|&nbsp;<a href='#' class='form-field-delete'>Delete</a></td>";
 				data += "</tr>";
 			});
@@ -264,6 +266,7 @@ $(document).on('click','.form-text-hide,.form-text-expand',function(){
 		table.find('.before-text').hide();
 		table.find('.after-text').hide();
 		table.find('.success-text').hide();
+		table.find('.confirmation-text').hide();
 		$(this).addClass('form-text-expand');
 		$(this).removeClass('form-text-hide');
 	} else if($(this).hasClass('form-text-expand')) {
@@ -271,6 +274,7 @@ $(document).on('click','.form-text-hide,.form-text-expand',function(){
 		table.find('.before-text').hide();
 		table.find('.after-text').hide();
 		table.find('.success-text').hide();
+		table.find('.confirmation-text').hide();
 		table.find('.form-text-hide').addClass('form-text-expand');
 		table.find('.form-text-hide').removeClass('form-text-hide');
 		if($(this).hasClass('before')) {
@@ -279,6 +283,8 @@ $(document).on('click','.form-text-hide,.form-text-expand',function(){
 			table.find('.after-text').show();
 		} else if($(this).hasClass('success')) {
 			table.find('.success-text').show();
+		} else if($(this).hasClass('confirmation')) {
+			table.find('.confirmation-text').show();
 		}
 		$(this).addClass('form-text-hide');
 		$(this).removeClass('form-text-expand');
