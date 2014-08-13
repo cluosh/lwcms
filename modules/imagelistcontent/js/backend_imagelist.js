@@ -48,6 +48,7 @@ function getImageListOverview(areaID) {
 				filebrowserFlashBrowseUrl : 'plugins/pdw_file_browser/index.php?editor=ckeditor&filter=flash',
 				coreStyles_bold: { element: 'b' },
 				coreStyles_italic: { element: 'i' },
+				extraPlugins: 'sourcedialog',
 				enterMode:3
 			});
 		});
@@ -71,6 +72,7 @@ function getImageListOverview(areaID) {
 						filebrowserFlashBrowseUrl : 'plugins/pdw_file_browser/index.php?editor=ckeditor&filter=flash',
 						coreStyles_bold: { element: 'b' },
 						coreStyles_italic: { element: 'i' },
+						extraPlugins: 'sourcedialog',
 						enterMode:3
 					});
 					$(this).removeClass('.new-edit');
