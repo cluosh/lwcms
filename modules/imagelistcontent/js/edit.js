@@ -6,7 +6,7 @@
 function updateImageListContent() {
 	$('#imagelist-changes').val("");
 	$('.imagelist-row').each(function(){
-		$('#imagelist-changes').val($('#imagelist-changes').val()+encodeURIComponent($(this).children('.imagelist-url').children('img').attr("src"))+"="+encodeURIComponent($(this).find('.imagelist-shorttext div').html())+"="+encodeURIComponent($(this).find('.imagelist-longtext div').html())+"="+encodeURIComponent($(this).find('.image-popup-text div').html())+";");
+		$('#imagelist-changes').val($('#imagelist-changes').val()+encodeURIComponent($(this).children('.imagelist-url').children('img').attr("src"))+"="+encodeURIComponent($(this).find('.imagelist-shorttext div').html())+"="+encodeURIComponent($(this).find('.imagelist-longtext textarea').ckeditorGet().getData())+"="+encodeURIComponent($(this).find('.image-popup-text div').html())+";");
 	});
 }
 
@@ -32,7 +32,7 @@ function onEditPopupOpen_imagelistcontent(object) {
 			imagebox += "<td class='imagelist-url'><img src='"+url+"' /></td>";
 			imagebox += "<td class='image-popup-text'><div contenteditable='true'>"+popup_text+"</div></td>";
 			imagebox += "<td class='imagelist-shorttext'><div contenteditable='true'>"+short_text+"</div></td>";
-			imagebox += "<td class='imagelist-longtext'><div contenteditable='true'>"+long_text+"</div></td>";
+			imagebox += "<td class='imagelist-longtext'><textarea id='ckeditor-area' class='ckeditor-area'>"+long_text+"</textarea></td>";
 			imagebox += "<td><a href='#' class='imagelist-delete'>Delete</a>&nbsp;|&nbsp;<a href='#' class='imagelist-up'>Up</a>&nbsp;|&nbsp;<a href='#' class='imagelist-down'>Down</a></td>";
 			imagebox += "</tr>";
 			$('#imagelist-table tbody').append(imagebox);
@@ -48,6 +48,15 @@ function onEditPopupOpen_imagelistcontent(object) {
 				filebrowserFlashBrowseUrl : 'thirdparty/pdw_file_browser/index.php?editor=ckeditor&filter=flash',
 				coreStyles_bold: { element: 'b' },
 				coreStyles_italic: { element: 'i' },
+				enterMode:3
+			});
+			$(this).children('textarea').ckeditor({
+				filebrowserBrowseUrl : 'plugins/pdw_file_browser/index.php?editor=ckeditor',
+				filebrowserImageBrowseUrl : 'plugins/pdw_file_browser/index.php?editor=ckeditor&filter=image',
+				filebrowserFlashBrowseUrl : 'plugins/pdw_file_browser/index.php?editor=ckeditor&filter=flash',
+				coreStyles_bold: { element: 'b' },
+				coreStyles_italic: { element: 'i' },
+				extraPlugins: 'sourcedialog',
 				enterMode:3
 			});
 		});
@@ -83,7 +92,7 @@ $(document).on("click",".imagelist-up,.imagelist-down,.imagelist-delete,#imageli
 			imagebox += "<td class='imagelist-url'><img src='"+$('#imagelist-new-image').val()+"' /></td>";
 			imagebox += "<td class='image-popup-text'><div class='new-edit' contenteditable='true'>Popup-Text</div></td>";
 			imagebox += "<td class='imagelist-shorttext'><div class='new-edit' contenteditable='true'>Demotext</div></td>";
-			imagebox += "<td class='imagelist-longtext'><div  class='new-edit' contenteditable='true'>Demotext</div></td>";
+			imagebox += "<td class='imagelist-longtext'><textarea id='ckeditor-area' class='ckeditor-area new-edit'>Demotext</textarea></td>";
 			imagebox += "<td><a href='#' class='imagelist-delete'>Delete</a>&nbsp;|&nbsp;<a href='#' class='imagelist-up'>Up</a>&nbsp;|&nbsp;<a href='#' class='imagelist-down'>Down</a></td>";
 			imagebox += "</tr>";
 			$('#imagelist-table tbody').append(imagebox);
