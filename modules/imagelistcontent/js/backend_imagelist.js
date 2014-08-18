@@ -43,26 +43,25 @@ function getImageListOverview(areaID) {
 		 */
 		$('.imagelist-shorttext,.imagelist-longtext,.image-popup-text').each(function(){
 			$(this).children('div').ckeditor({
-				filebrowserBrowseUrl : 'plugins/pdw_file_browser/index.php?editor=ckeditor',
-				filebrowserImageBrowseUrl : 'plugins/pdw_file_browser/index.php?editor=ckeditor&filter=image',
-				filebrowserFlashBrowseUrl : 'plugins/pdw_file_browser/index.php?editor=ckeditor&filter=flash',
+				filebrowserBrowseUrl : 'thirdparty/pdw_file_browser/index.php?editor=ckeditor',
+				filebrowserImageBrowseUrl : 'thirdparty/pdw_file_browser/index.php?editor=ckeditor&filter=image',
+				filebrowserFlashBrowseUrl : 'thirdparty/pdw_file_browser/index.php?editor=ckeditor&filter=flash',
 				coreStyles_bold: { element: 'b' },
 				coreStyles_italic: { element: 'i' },
 				extraPlugins: 'sourcedialog',
 				enterMode:3
 			});
 			$(this).children('textarea').ckeditor({
-				filebrowserBrowseUrl : 'plugins/pdw_file_browser/index.php?editor=ckeditor',
-				filebrowserImageBrowseUrl : 'plugins/pdw_file_browser/index.php?editor=ckeditor&filter=image',
-				filebrowserFlashBrowseUrl : 'plugins/pdw_file_browser/index.php?editor=ckeditor&filter=flash',
+				filebrowserBrowseUrl : 'thirdparty/pdw_file_browser/index.php?editor=ckeditor',
+				filebrowserImageBrowseUrl : 'thirdparty/pdw_file_browser/index.php?editor=ckeditor&filter=image',
+				filebrowserFlashBrowseUrl : 'thirdparty/pdw_file_browser/index.php?editor=ckeditor&filter=flash',
 				coreStyles_bold: { element: 'b' },
 				coreStyles_italic: { element: 'i' },
-				extraPlugins: 'sourcedialog',
 				enterMode:3
 			});
 		});
 		$('#imagelist-new-image').bind('click',function(){
-			window.open("plugins/pdw_file_browser/index.php?editor=standalone&returnID=imagelist-new-image",'pdwfilebrowser', 'width=1000,height=650,scrollbars=no,toolbar=no,location=no');
+			window.open("thirdparty/pdw_file_browser/index.php?editor=standalone&returnID=imagelist-new-image",'pdwfilebrowser', 'width=1000,height=650,scrollbars=no,toolbar=no,location=no');
 		});
 		$('#imagelist-add-image').bind('click',function(){
 			if($('#imagelist-new-image').val() != "Click here to browse images...") {
@@ -76,12 +75,11 @@ function getImageListOverview(areaID) {
 				$('#imagelist-table tbody').append(imagebox);
 				$('.new-edit').each(function(){
 					$(this).ckeditor({
-						filebrowserBrowseUrl : 'plugins/pdw_file_browser/index.php?editor=ckeditor',
-						filebrowserImageBrowseUrl : 'plugins/pdw_file_browser/index.php?editor=ckeditor&filter=image',
-						filebrowserFlashBrowseUrl : 'plugins/pdw_file_browser/index.php?editor=ckeditor&filter=flash',
+						filebrowserBrowseUrl : 'thirdparty/pdw_file_browser/index.php?editor=ckeditor',
+						filebrowserImageBrowseUrl : 'thirdparty/pdw_file_browser/index.php?editor=ckeditor&filter=image',
+						filebrowserFlashBrowseUrl : 'thirdparty/pdw_file_browser/index.php?editor=ckeditor&filter=flash',
 						coreStyles_bold: { element: 'b' },
 						coreStyles_italic: { element: 'i' },
-						extraPlugins: 'sourcedialog',
 						enterMode:3
 					});
 					$(this).removeClass('.new-edit');

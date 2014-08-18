@@ -52,7 +52,7 @@
 				$popup_text = urldecode($content[3]);
 				$imagelist .= "<div class='image-list-box'>";
 				$imagelist .= "<img class='image' src='".$url."' alt='".$popup_text."'/>";
-				$imagelist .= ($long_text != "") ? '<div class="text"><div style="float:left;">'.$short_text.'</div>&nbsp;&nbsp;<a href="#" class="read-more">Read more.</a></div><div class="hidden-text"><a href="#" class="image-list-hide">#</a>'.$long_text.'</div>' : '<div class="text">'.$short_text.'</div>';
+				$imagelist .= ($long_text != "") ? '<div class="text"><div>'.$short_text.'</div>&nbsp;&nbsp;<a href="#" class="read-more">Read more.</a></div><div class="hidden-text"><a href="#" class="image-list-hide">#</a>'.$long_text.'</div>' : '<div class="text">'.$short_text.'</div>';
 				$imagelist .= "</div>\n";
 			}
 			return $imagelist;

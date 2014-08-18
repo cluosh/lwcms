@@ -51,12 +51,11 @@ function onEditPopupOpen_imagelistcontent(object) {
 				enterMode:3
 			});
 			$(this).children('textarea').ckeditor({
-				filebrowserBrowseUrl : 'plugins/pdw_file_browser/index.php?editor=ckeditor',
-				filebrowserImageBrowseUrl : 'plugins/pdw_file_browser/index.php?editor=ckeditor&filter=image',
-				filebrowserFlashBrowseUrl : 'plugins/pdw_file_browser/index.php?editor=ckeditor&filter=flash',
+				filebrowserBrowseUrl : 'thirdparty/pdw_file_browser/index.php?editor=ckeditor',
+				filebrowserImageBrowseUrl : 'thirdparty/pdw_file_browser/index.php?editor=ckeditor&filter=image',
+				filebrowserFlashBrowseUrl : 'thirdparty/pdw_file_browser/index.php?editor=ckeditor&filter=flash',
 				coreStyles_bold: { element: 'b' },
 				coreStyles_italic: { element: 'i' },
-				extraPlugins: 'sourcedialog',
 				enterMode:3
 			});
 		});
